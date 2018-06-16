@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 
+import ENV from '../../env.json';
+
 class Home extends React.Component {
   state = {
     isLoading: true,
@@ -13,7 +15,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     const channelId = 'UCa22yvSVK7nu-O7PrzTuafA';
-    const key = 'AIzaSyDQVzBPCDbkf7sMECj8viRCZ7DnGVrJeT0';
+    const key = ENV.GCP_API_KEY;
     const maxResults = 7;
 
     const endpoint = `https://www.googleapis.com/youtube/v3/search?key=${key}&maxResults=${maxResults}&channelId=${channelId}&part=snippet`

@@ -4,6 +4,8 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import Home from './src/screens/Home.js';
 
+console.ignoredYellowBox = ['Remote debugger'];
+
 export default class App extends React.Component {
   render() {
     return (

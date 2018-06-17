@@ -1,16 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Alert, Dimensions, Image } from 'react-native';
 
 import ENV from '../../env.json';
+import VideoTile from '../components/VideoTile.js';
+import BackgroundImage from '../../assets/bgImage/image4.jpg';
 
 class Home extends React.Component {
   state = {
     isLoading: true,
-    videos: [
-      { snippet: { title: 'video 1' } },
-      { snippet: { title: 'video 2' } },
-      { snippet: { title: 'video 3' } },
-    ],
   }
 
   componentDidMount() {
@@ -34,13 +31,26 @@ class Home extends React.Component {
       });
   }
 
+  onPressTest() {
+    Alert.alert('Test!');
+  }
+
   keyExtractor = (item, index) => index.toString();
 
-  renderItem({ item }) {
+  renderItem({ item, index }) {
     return (
-      <Text>
-        { item.snippet.title }
-      </Text>
+      <VideoTile
+        // onPress={() => {
+        //   this.props.navigation.navigate({
+        //     routeName: 'Home',
+        //   });
+        // }}
+        onPress={this.onPressTest}
+        thumbnailUrl={item.snippet.thumbnails.high.url}
+        title={item.snippet.title}
+        desc={item.snippet.description}
+        index={index}
+      />
     );
   }
 
@@ -55,6 +65,12 @@ class Home extends React.Component {
 
     return (
       <View style={styles.container}>
+        <Image
+          style={styles.bgImage}
+          // source={this.state.backgroundImage}
+          source={BackgroundImage}
+          resizeMode="cover"
+        />
         <View style={styles.videoList}>
           <FlatList
             data={this.state.videos}
@@ -72,6 +88,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 70,
+  },
+  bgImage: {
+    opacity: 0.8,
+    position: 'absolute',
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
     justifyContent: 'center',
   },
 });

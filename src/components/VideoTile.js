@@ -15,18 +15,20 @@ class VideoTile extends React.Component {
       thumbnailUrl,
       title,
       desc,
+      player,
+      tags,
       index,
     } = this.props;
-
-    const caption = `${index} ${title}`
 
     return (
       <View style={styles.container}>
         <TouchableHighlight onPress={onPress} underlayColor="transparent">
           <View style={styles.tile}>
-
-            <Text style={styles.caption}>
-              {title}
+            <Text style={styles.skill}>
+              {tags.join('の')}
+            </Text>
+            <Text style={styles.player}>
+              {player.join(', ').replace('選手', '')}
             </Text>
           </View>
         </TouchableHighlight>
@@ -43,16 +45,10 @@ class VideoTile extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
-    // width: Dimensions.get('window').width,
-
   },
   tile: {
     justifyContent: 'center',
-    padding: 12,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 20,
+    padding: 8,
     backgroundColor: '#0787C3',
     borderColor: '#808080',
     borderRadius: 5,
@@ -72,8 +68,19 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width * 0.35,
     height: Dimensions.get('window').width * 0.2,
   },
-  caption: {
+  player: {
     color: '#fff',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  skill: {
+    color: '#fff',
+    fontWeight: '500',
+    fontSize: 18,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 });
 

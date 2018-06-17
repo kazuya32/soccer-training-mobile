@@ -1,26 +1,51 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import firebase from 'firebase';
+import { createStackNavigator } from 'react-navigation';
 
-import Home from './src/screens/Home.js';
+import ENV from './env.json';
+import Recent from './src/screens/Recent.js';
+import VideoPlayer from './src/screens/VideoPlayer.js';
+// import YoutubePlayer from './src/screens/YoutubePlayer.js';
 
+// eslint-disable-next-line
+require('firebase/firestore');
+// eslint-disable-next-line
 console.ignoredYellowBox = ['Remote debugger'];
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Home />
-      </View>
-    );
-  }
-}
+// eslint-disable-next-line
+const config = {
+  apiKey:            ENV.FIREBASE_API_KEY,
+  authDomain:        ENV.FIREBASE_AUTH_DOMAIN,
+  databaseURL:       ENV.FIREBASE_DB_URL,
+  projectId:         ENV.FIREBASE_PROJECT_ID,
+  storageBucket:     ENV.FIREBASE_STORAGE,
+  messagingSenderId: ENV.FIREBASE_SENDER_ID,
+};
+firebase.initializeApp(config);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const App = createStackNavigator({
+  Recent: { screen: Recent },
+  VideoPlayer: { screen: VideoPlayer },
+}, {
+  headerMode: 'none',
+  // navigationOptions: {
+  //   headerTitle: 'FLEGO',
+  //   headerStyle: {
+  //     backgroundColor: '#FCFCFC',
+  //     shadowColor: '#000',
+  //     shadowOffset: { width: 0, height: 0 },
+  //     shadowOpacity: 0.3,
+  //     shadowRadius: 1,
+  //     paddingRight: 14,
+  //     paddingLeft: 14,
+  //   },
+  //   headerTitleStyle: {
+  //     color: '#000000',
+  //   },
+  //   headerTintColor: '#fff',
+  //   headerBackTitle: '<',
+  //   headerLeft: <FontAwesomeIcon name="user-circle-o" size={24} />,
+  //   headerRight: <MaterialCommunityIcon name="bell-outline" size={24} />,
+  // },
 });
+
+export default App;

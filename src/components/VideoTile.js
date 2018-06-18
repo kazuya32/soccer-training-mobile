@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   tile: {
     justifyContent: 'center',
     padding: 8,
-    backgroundColor: '#0787C3',
+    backgroundColor: '#102330',
     borderColor: '#808080',
     borderRadius: 5,
     shadowColor: '#000',

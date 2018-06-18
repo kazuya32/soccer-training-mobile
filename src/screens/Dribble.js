@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import CategoryList from '../components/CategoryList.js';
-import BackgroundImage from '../../assets/bgImage/bg.jpg';
+import BackgroundImage from '../../assets/bgImage/image12.jpg';
 
 class Dribble extends React.Component {
   render() {

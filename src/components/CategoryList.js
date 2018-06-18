@@ -43,13 +43,13 @@ class CategoryList extends React.Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  renderItem({ item, index }) {
-    const { tileColor, navigation } = this.props;
+  renderItem = ({ item, index }) => {
+    const { navigation } = this.props;
 
     return (
       <View style={styles.item}>
         <VideoTile
-          tileStyle={{ backgroundColor: tileColor }}
+          // tileStyle={{ backgroundColor: tileColor }}
           onPress={() => {
             navigation.navigate({
               routeName: 'VideoPlayer',
@@ -89,7 +89,7 @@ class CategoryList extends React.Component {
         <View style={styles.videoContainer}>
           <FlatList
             data={this.state.videos}
-            renderItem={this.renderItem.bind(this)}
+            renderItem={this.renderItem}
             keyExtractor={this.keyExtractor}
           />
         </View>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     marginTop: 10,
-    marginBottom: 10,
+    // paddingBottom: 10,
     width: '100%',
     justifyContent: 'flex-start',
   },

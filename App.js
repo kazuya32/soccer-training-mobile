@@ -1,7 +1,8 @@
 import React from 'react';
+import { StyleSheet, Dimensions } from 'react-native';
 import firebase from 'firebase';
 import { createStackNavigator } from 'react-navigation';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 
 import ENV from './env.json';
 import Recent from './src/screens/Recent.js';
@@ -72,21 +73,60 @@ const FreeKickStack = createStackNavigator({
   headerMode: 'none',
 });
 
+
 class App extends React.Component {
+  // renderTabBar = () => {
+  //   return (
+  //     <ScrollableTabBar
+  //       activeTab={styles.activeTab}
+  //     />
+  //   );
+  // }
+
+  renderTabBar = () => <ScrollableTabBar activeTab={styles.activeTab} />;
+
   render() {
     return (
       <ScrollableTabView
-        style={{ paddingTop: 40 }}
+        style={styles.header}
+        renderTabBar={this.renderTabBar}
+        tabBarBackgroundColor="#102330"
+        tabBarUnderlineStyle={styles.underline}
+        tabBarActiveTextColor="#fff"
+        tabBarInactiveTextColor="#fff"
+        // tabBarTextStyle
       >
         <RecentStack tabLabel="新着" />
         <DribbleStack tabLabel="ドリブル" />
         <ShootStack tabLabel="シュート" />
-        <PassStack tabLabel="パス" />
+        <PassStack tabLabel="パ ス" />
         <TrapStack tabLabel="トラップ" />
         <FreeKickStack tabLabel="フリーキック" />
       </ScrollableTabView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  header: {
+    height: 30,
+    paddingTop: Dimensions.get('window').width * 0.08,
+    backgroundColor: '#102330',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#272C35',
+  },
+  underline: {
+    backgroundColor: '#fff',
+  },
+  activeTab: {
+    borderColor: '#fff',
+    borderWidth: 1,
+  },
+});
+
 
 export default App;

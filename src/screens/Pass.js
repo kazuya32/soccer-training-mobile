@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import CategoryList from '../components/CategoryList.js';
-import BackgroundImage from '../../assets/bgImage/image4.jpg';
+import BackgroundImage from '../../assets/bgImage/image10.jpg';
 
 class Pass extends React.Component {
   render() {

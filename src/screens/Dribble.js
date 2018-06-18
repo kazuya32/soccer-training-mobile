@@ -2,17 +2,17 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import CategoryList from '../components/CategoryList.js';
-import BackgroundImage from '../../assets/bgImage/image4.jpg';
+import BackgroundImage from '../../assets/bgImage/bg.jpg';
 
-class Recent extends React.Component {
+class Dribble extends React.Component {
   render() {
     return (
       <View style={styles.container}>
         <CategoryList
           navigation={this.props.navigation}
-          tileColor="#0787C3"
+          tileColor="#272C35"
           backgroundImage={BackgroundImage}
-          category="recent"
+          category="dribble"
         />
       </View>
     );
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Recent;
+export default Dribble;

@@ -18,12 +18,13 @@ class VideoTile extends React.Component {
       player,
       tags,
       index,
+      tileStyle,
     } = this.props;
 
     return (
       <View style={styles.container}>
         <TouchableHighlight onPress={onPress} underlayColor="transparent">
-          <View style={styles.tile}>
+          <View style={[styles.tile, tileStyle]}>
             <Text style={styles.skill}>
               {tags.join('の')}
             </Text>

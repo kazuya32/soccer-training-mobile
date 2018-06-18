@@ -1,8 +1,16 @@
+import React from 'react';
 import firebase from 'firebase';
 import { createStackNavigator } from 'react-navigation';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 import ENV from './env.json';
 import Recent from './src/screens/Recent.js';
+import Dribble from './src/screens/Dribble.js';
+import Shoot from './src/screens/Shoot.js';
+import Pass from './src/screens/Pass.js';
+import Trap from './src/screens/Trap.js';
+import FreeKick from './src/screens/FreeKick.js';
+
 import VideoPlayer from './src/screens/VideoPlayer.js';
 // import YoutubePlayer from './src/screens/YoutubePlayer.js';
 
@@ -22,30 +30,63 @@ const config = {
 };
 firebase.initializeApp(config);
 
-const App = createStackNavigator({
+const RecentStack = createStackNavigator({
   Recent: { screen: Recent },
   VideoPlayer: { screen: VideoPlayer },
 }, {
   headerMode: 'none',
-  // navigationOptions: {
-  //   headerTitle: 'FLEGO',
-  //   headerStyle: {
-  //     backgroundColor: '#FCFCFC',
-  //     shadowColor: '#000',
-  //     shadowOffset: { width: 0, height: 0 },
-  //     shadowOpacity: 0.3,
-  //     shadowRadius: 1,
-  //     paddingRight: 14,
-  //     paddingLeft: 14,
-  //   },
-  //   headerTitleStyle: {
-  //     color: '#000000',
-  //   },
-  //   headerTintColor: '#fff',
-  //   headerBackTitle: '<',
-  //   headerLeft: <FontAwesomeIcon name="user-circle-o" size={24} />,
-  //   headerRight: <MaterialCommunityIcon name="bell-outline" size={24} />,
-  // },
 });
+
+const DribbleStack = createStackNavigator({
+  Dribble: { screen: Dribble },
+  VideoPlayer: { screen: VideoPlayer },
+}, {
+  headerMode: 'none',
+});
+
+const ShootStack = createStackNavigator({
+  Shoot: { screen: Shoot },
+  VideoPlayer: { screen: VideoPlayer },
+}, {
+  headerMode: 'none',
+});
+
+const PassStack = createStackNavigator({
+  Pass: { screen: Pass },
+  VideoPlayer: { screen: VideoPlayer },
+}, {
+  headerMode: 'none',
+});
+
+const TrapStack = createStackNavigator({
+  Trap: { screen: Trap },
+  VideoPlayer: { screen: VideoPlayer },
+}, {
+  headerMode: 'none',
+});
+
+const FreeKickStack = createStackNavigator({
+  FreeKick: { screen: FreeKick },
+  VideoPlayer: { screen: VideoPlayer },
+}, {
+  headerMode: 'none',
+});
+
+class App extends React.Component {
+  render() {
+    return (
+      <ScrollableTabView
+        style={{ paddingTop: 40 }}
+      >
+        <RecentStack tabLabel="新着" />
+        <DribbleStack tabLabel="ドリブル" />
+        <ShootStack tabLabel="シュート" />
+        <PassStack tabLabel="パス" />
+        <TrapStack tabLabel="トラップ" />
+        <FreeKickStack tabLabel="フリーキック" />
+      </ScrollableTabView>
+    );
+  }
+}
 
 export default App;

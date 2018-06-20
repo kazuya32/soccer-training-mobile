@@ -53,7 +53,7 @@ class CategoryList extends React.Component {
           onPress={() => {
             navigation.navigate({
               routeName: 'VideoPlayer',
-              params: item.data.youtubeData,
+              params: item.data,
             });
           }}
           thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}

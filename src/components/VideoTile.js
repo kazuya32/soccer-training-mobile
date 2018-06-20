@@ -4,7 +4,7 @@ import {
   View,
   Text,
   TouchableHighlight,
-  Image,
+  // Image,
   Dimensions,
 } from 'react-native';
 
@@ -12,12 +12,12 @@ class VideoTile extends React.Component {
   render() {
     const {
       onPress,
-      thumbnailUrl,
-      title,
-      desc,
+      // thumbnailUrl,
+      // title,
+      // desc,
       player,
       tags,
-      index,
+      // index,
       tileStyle,
     } = this.props;
 

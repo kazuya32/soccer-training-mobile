@@ -1,15 +1,17 @@
 import React from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-class TipsButton extends React.Component {
+class MovieButton extends React.Component {
   render() {
     const { onPress } = this.props;
 
     return (
       <TouchableHighlight onPress={onPress} style={styles.container} underlayColor="transparent">
-        <Icon name="soccer-ball-o" size={34} style={styles.button} />
+        <View style={styles.button} >
+          <Icon name="movie" size={32} style={styles.icon} />
+        </View>
       </TouchableHighlight>
     );
   }
@@ -35,10 +37,11 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: 'center',
+  },
+  icon: {
+    alignSelf: 'center',
     color: 'black',
-    // borderRadius: 48 * 0.5,
-
   },
 });
 
-export default TipsButton;
+export default MovieButton;

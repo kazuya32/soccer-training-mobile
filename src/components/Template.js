@@ -1,21 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator, Dimensions, Image, Alert } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Alert } from 'react-native';
 import firebase from 'firebase';
-import { Video } from 'expo';
 
 import ContentTile from './ContentTile.js';
-import BackgroundImage from '../../assets/bgImage/image4.jpg';
 
 class Template extends React.Component {
   state = {
     isLoading: true,
-    videoUrl: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
   }
 
   componentDidMount() {
     this.fetchVideos();
   }
-
+  // eslint-disable-next-line
   fetchVideos = () => {
     const db = firebase.firestore();
     let videosRef;
@@ -72,8 +69,7 @@ class Template extends React.Component {
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => {
-    // const { navigation } = this.props;
-
+    // const isCurrent = {}
     return (
       <View style={styles.item}>
         <ContentTile
@@ -84,7 +80,7 @@ class Template extends React.Component {
           //     params: item.data,
           //   });
           // }}
-          onPressTile={this.onPressTile}
+          onPress={this.onPressTile}
           onPressRightButton={this.onPressButton}
           thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}
           title={item.data.youtubeData.snippet.title}
@@ -106,28 +102,8 @@ class Template extends React.Component {
       );
     }
 
-    // const { backgroundImage } = this.props;
-    const backgroundImage = BackgroundImage;
-
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.bgImage}
-          source={backgroundImage}
-          resizeMode="cover"
-        />
-        <Video
-          source={{ uri: this.state.videoUrl }}
-          rate={1.0}
-          volume={1.0}
-          isMuted
-          resizeMode="cover"
-          shouldPlay
-          isLooping
-          useNativeControls
-          // shouldCorrectPitch
-          style={styles.videoPlayer}
-        />
         <View style={styles.listContainer}>
           <FlatList
             data={this.state.videos}
@@ -143,15 +119,7 @@ class Template extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  bgImage: {
-    opacity: 0.8,
-    position: 'absolute',
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width,
-    // flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   listContainer: {
     marginTop: 10,
@@ -160,14 +128,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   item: {
-    marginBottom: 15,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  videoPlayer: {
-    height: Dimensions.get('window').height * 0.4,
-    width: Dimensions.get('window').width,
-    alignSelf: 'center',
+    marginBottom: 4,
+    // marginLeft: 20,
+    // marginRight: 20,
   },
 });
 

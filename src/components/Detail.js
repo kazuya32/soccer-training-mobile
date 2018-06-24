@@ -4,6 +4,7 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import MovieButton from '../elements/MovieButton.js';
 import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
+import UrlTile from './UrlTile.js';
 
 class Detail extends React.Component {
   render() {
@@ -40,6 +41,10 @@ class Detail extends React.Component {
           <AdviceTile
             title="実践アドバイス"
             comment={item.data.advice}
+          />
+          <UrlTile
+            title="酒井潤公式HP"
+            url="http://sakaijunsoccer.appspot.com/soccer"
           />
         </ScrollView>
       </View>

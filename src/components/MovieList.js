@@ -8,6 +8,7 @@ class MovieList extends React.Component {
   renderTabBar = () => <ScrollableTabBar style={styles.header} activeTab={styles.activeTab} />;
 
   render() {
+    console.log(this.props.recentVideos);
     return (
       <ScrollableTabView
         renderTabBar={this.renderTabBar}
@@ -19,33 +20,39 @@ class MovieList extends React.Component {
       >
         <Template
           tabLabel="新着"
-          // navigation={this.props.navigation}
           category="recent"
+          onPress={this.props.onPress}
+          videos={this.props.recentVideos}
         />
         <Template
           tabLabel="ドリブル"
-          // navigation={this.props.navigation}
-          category="recent"
+          category="dribble"
+          onPress={this.props.onPress}
+          videos={this.props.dribbleVideos}
         />
         <Template
           tabLabel="シュート"
-          // navigation={this.props.navigation}
-          category="recent"
+          category="shoot"
+          onPress={this.props.onPress}
+          videos={this.props.shootVideos}
         />
         <Template
           tabLabel="パ ス"
-          // navigation={this.props.navigation}
-          category="recent"
+          category="pass"
+          onPress={this.props.onPress}
+          videos={this.props.passVideos}
         />
         <Template
           tabLabel="トラップ"
-          // navigation={this.props.navigation}
-          category="recent"
+          category="trap"
+          onPress={this.props.onPress}
+          videos={this.props.trapVideos}
         />
         <Template
           tabLabel="フリーキック"
-          // navigation={this.props.navigation}
-          category="recent"
+          category="freeKick"
+          onPress={this.props.onPress}
+          videos={this.props.freeKickVideos}
         />
       </ScrollableTabView>
     );

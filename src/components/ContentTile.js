@@ -5,14 +5,17 @@ import {
   Text,
   TouchableHighlight,
   Image,
+  AsyncStorage,
 } from 'react-native';
 
-class CotentTile extends React.Component {
+class ContentTile extends React.Component {
+  state = {}
+
   render() {
     const {
       onPress,
       thumbnailUrl,
-      // title,
+      title,
       // desc,
       player,
       tags,
@@ -20,6 +23,10 @@ class CotentTile extends React.Component {
       // index,
       // tileStyle,
     } = this.props;
+
+    AsyncStorage.getItem('currentId', (err, result) => {
+      this.setState({ active: (result === title) });
+    });
 
     return (
       <TouchableHighlight style={styles.container} onPress={onPress} underlayColor="transparent">
@@ -30,7 +37,7 @@ class CotentTile extends React.Component {
             resizeMode="cover"
           />
           <View style={styles.caption}>
-            <Text style={styles.skill}>
+            <Text style={[styles.skill, this.state.active && styles.skillActive]}>
               {tags.join('の')}
             </Text>
             <Text style={styles.player}>
@@ -78,11 +85,9 @@ const styles = StyleSheet.create({
     // paddingLeft: 8,
     // paddingRight: 8,
   },
-  tipsButton: {
-    width: 50,
-    alignContent: 'center',
-    justifyContent: 'center',
+  skillActive: {
+    color: '#1BBA53',
   },
 });
 
-export default CotentTile;
+export default ContentTile;

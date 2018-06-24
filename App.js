@@ -1,11 +1,7 @@
-import { createStackNavigator } from 'react-navigation';
 import firebase from 'firebase';
 
 import ENV from './env.json';
 import Home from './src/screens/Home.js';
-
-// import VideoPlayer from './src/screens/VideoPlayer.js';
-// import YoutubePlayer from './src/screens/YoutubePlayer.js';
 
 // eslint-disable-next-line
 require('firebase/firestore');
@@ -23,11 +19,10 @@ const config = {
 };
 firebase.initializeApp(config);
 
-const App = createStackNavigator({
-  Home: { screen: Home },
-}, {
-  headerMode: 'none',
-});
+// const App = createStackNavigator({
+//   Home: { screen: Home },
+// }, {
+//   headerMode: 'none',
+// });
 
-
-export default App;
+export default Home;

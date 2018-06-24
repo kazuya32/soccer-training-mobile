@@ -1,87 +1,31 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator, Alert } from 'react-native';
-import firebase from 'firebase';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 
 import ContentTile from './ContentTile.js';
 
 class Template extends React.Component {
-  state = {
-    isLoading: true,
-  }
+  state = {}
 
-  componentDidMount() {
+  componentWillMount() {
     this.fetchVideos();
   }
-  // eslint-disable-next-line
+
   fetchVideos = () => {
-    const db = firebase.firestore();
-    let videosRef;
-
-    const { category } = this.props;
-    if (category === 'recent') {
-      const maxResults = 10;
-      videosRef = db.collection('videos').orderBy('publishedAt', 'desc').limit(maxResults);
-    } else {
-      videosRef = db.collection('videos').where('category', '==', category);
-    }
-
-    let videos = [];
-    videosRef.get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          videos.push({
-            id: doc.id,
-            data: doc.data(),
-          });
-        });
-        videos = this.shuffle(videos);
-        this.setState({
-          isLoading: false,
-          videos,
-        });
-      });
-  }
-
-  shuffle = (array) => {
-    let currentIndex = array.length;
-    let temporaryValue;
-    let randomIndex;
-
-    while (currentIndex !== 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-  }
-
-  onPressButton = () => {
-    Alert.alert('月の上限に達しました！');
-  }
-
-  onPressTile = () => {
-    Alert.alert('表示する動画が変わります！');
+    const { videos } = this.props;
+    this.setState({
+      videos,
+    });
   }
 
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => {
-    // const isCurrent = {}
+    const { onPress } = this.props;
     return (
       <View style={styles.item}>
         <ContentTile
           // tileStyle={{ backgroundColor: tileColor }}
-          // onPressTile={() => {
-          //   navigation.navigate({
-          //     routeName: 'VideoPlayer',
-          //     params: item.data,
-          //   });
-          // }}
-          onPress={this.onPressTile}
-          onPressRightButton={this.onPressButton}
+          onPress={() => onPress(item)}
           thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}
           title={item.data.youtubeData.snippet.title}
           desc={item.data.youtubeData.snippet.description}
@@ -94,7 +38,7 @@ class Template extends React.Component {
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (!this.state.videos) {
       return (
         <View style={{ flex: 1, padding: 20 }}>
           <ActivityIndicator />

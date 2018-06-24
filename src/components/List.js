@@ -1,31 +1,39 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 
 import MovieList from '../components/MovieList.js';
 import TipsButton from '../elements/TipsButton.js';
 
 
 class List extends React.Component {
-  state = {
-    item: null,
-  }
+  state = {}
 
-  componentWillMount() {
-    // console.log(this.props.navigation.getParam('onPress'));
-    console.log(this.props.navigation.state);
-  }
+  // componentWillMount() {
+  //   this.setState({ item: this.props.navigation.getParam('initialItem') });
+  // }
 
-  onPress = (item) => {
+  onTilePress = (item) => {
     const setVideo = this.props.navigation.getParam('onPress');
     setVideo(item);
-    this.setState({ item });
+  }
+
+  onButtonPress = () => {
+    const item = this.props.navigation.getParam('currentItem');
+    if (item) {
+      this.props.navigation.navigate({
+        routeName: 'Detail',
+        params: { item },
+      });
+    } else {
+      Alert.alert('動画を一つ選んでからもう一度押してください。');
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
         <MovieList
-          onPress={this.onPress}
+          onPress={this.onTilePress}
           recentVideos={this.props.navigation.getParam('recentVideos')}
           dribbleVideos={this.props.navigation.getParam('dribbleVideos')}
           shootVideos={this.props.navigation.getParam('shootVideos')}
@@ -34,12 +42,7 @@ class List extends React.Component {
           freeKickVideos={this.props.navigation.getParam('freeKickVideos')}
         />
         <TipsButton
-          onPress={() => {
-            this.props.navigation.navigate({
-              routeName: 'Detail',
-              params: { item: this.state.item },
-            });
-          }}
+          onPress={this.onButtonPress}
         />
       </View>
     );

@@ -4,9 +4,9 @@ import { createStackNavigator } from 'react-navigation';
 import List from '../components/List.js';
 import Detail from '../components/Detail.js';
 
-class Stack extends React.Component {
+class UnderPane extends React.Component {
   render() {
-    const S = createStackNavigator({
+    const Stack = createStackNavigator({
       List: { screen: List },
       Detail: { screen: Detail },
     }, {
@@ -19,13 +19,14 @@ class Stack extends React.Component {
         passVideos: this.props.passVideos,
         trapVideos: this.props.trapVideos,
         freeKickVideos: this.props.freeKickVideos,
+        currentItem: this.props.currentItem,
       },
     });
 
     return (
-      <S />
+      <Stack />
     );
   }
 }
 
-export default Stack;
+export default UnderPane;

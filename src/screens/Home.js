@@ -21,10 +21,13 @@ import UnderPane from '../components/UnderPane.js';
 
 class Home extends React.Component {
   state = {
-    videoUrl: null,
+    videoUrl: 'https://firebasestorage.googleapis.com/v0/b/lifting-cb667.appspot.com/o/video%2FwithoutComment%2FYoutube%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB%E7%B4%B9%E4%BB%8B%E3%83%92%E3%82%99%E3%83%86%E3%82%99%E3%82%AA.mp4?alt=media&token=d307512f-92b3-463d-be8c-9e9c1d814bab',
+    // initialItem: null,
   }
 
   componentWillMount() {
+    AsyncStorage.setItem('currentId', ' ');
+
     // this.fetchInitialVideo();
     const categories = [
       'dribble',
@@ -85,12 +88,10 @@ class Home extends React.Component {
           });
         });
         videos = this.shuffle(videos);
-        console.log('videos');
-        console.log(videos);
 
         switch (category) {
           case 'recent':
-            this.onPressTest(videos[0]);
+            // this.initItem(videos[0]);
             this.setState({ recentVideos: videos });
             break;
           case 'dribble':
@@ -115,6 +116,12 @@ class Home extends React.Component {
         }
       });
   }
+
+  // initItem = (item) => {
+    // this.setState({ initialItem: item });
+    // this.onPressTest(item);
+  // }
+
 
   shuffle = (array) => {
     let currentIndex = array.length;
@@ -142,22 +149,18 @@ class Home extends React.Component {
     const withoutCommentRef = storageRef.child(`video/withoutComment/${item.id}.mp4`);
     withoutCommentRef.getDownloadURL()
       .then((videoUrl) => {
-        AsyncStorage.setItem('currentId', item.id, (err, result) => {
-          console.log(result);
-        });
-        this.setState({ videoUrl });
+        AsyncStorage.setItem('currentId', item.id);
+        this.setState({ videoUrl, item });
       })
       .catch(() => {
         const withCommentRef = storageRef.child(`video/withComment/${item.id}.mp4`);
         withCommentRef.getDownloadURL()
           .then((videoUrl) => {
-            AsyncStorage.setItem('currentId', item.id, (err, result) => {
-              console.log(result);
-            });
-            this.setState({ videoUrl });
+            AsyncStorage.setItem('currentId', item.id);
+            this.setState({ videoUrl, item });
           })
           .catch(() => {
-            Alert.alert('この動画はまだ利用できません。かたじけない！');
+            Alert.alert('この動画は現在アプリではみれません。');
           });
       });
   }
@@ -185,6 +188,7 @@ class Home extends React.Component {
           passVideos={this.state.passVideos}
           trapVideos={this.state.trapVideos}
           freeKickVideos={this.state.freeKickVideos}
+          currentItem={this.state.item}
         />
       </View>
     );

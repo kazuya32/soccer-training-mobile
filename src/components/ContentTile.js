@@ -19,9 +19,7 @@ class ContentTile extends React.Component {
       // desc,
       player,
       tags,
-      // isCurrent,
       // index,
-      // tileStyle,
     } = this.props;
 
     AsyncStorage.getItem('currentId', (err, result) => {

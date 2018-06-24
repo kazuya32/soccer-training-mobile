@@ -8,7 +8,6 @@ class MovieList extends React.Component {
   renderTabBar = () => <ScrollableTabBar style={styles.header} activeTab={styles.activeTab} />;
 
   render() {
-    console.log(this.props.recentVideos);
     return (
       <ScrollableTabView
         renderTabBar={this.renderTabBar}

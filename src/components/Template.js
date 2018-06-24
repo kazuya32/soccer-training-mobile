@@ -24,7 +24,6 @@ class Template extends React.Component {
     return (
       <View style={styles.item}>
         <ContentTile
-          // tileStyle={{ backgroundColor: tileColor }}
           onPress={() => onPress(item)}
           thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}
           title={item.data.youtubeData.snippet.title}

@@ -122,6 +122,27 @@ class Home extends React.Component {
     // this.onPressTest(item);
   // }
 
+  // eslint-disable-next-line
+  // dangerous = () => {
+  //     const db = firebase.firestore();
+  //     videosRef = db.collection('videos');
+  //     videosRef.get()
+  //       .then((querySnapshot) => {
+  //         querySnapshot.forEach((doc) => {
+  //           ref = db.collection('videos').doc(doc.id);
+  //           ref.update({
+  //               "advanced": [],
+  //               "failure": [],
+  //               "practice": [],
+  //               "point": [],
+  //               "advice": '',
+  //           })
+  //           .then(function() {
+  //               console.log("Document successfully updated!");
+  //           });
+  //         });
+  //       });
+  // }
 
   shuffle = (array) => {
     let currentIndex = array.length;

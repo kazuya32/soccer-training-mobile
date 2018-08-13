@@ -12,14 +12,6 @@ class UnderPane extends React.Component {
     }, {
       headerMode: 'none',
       initialRouteParams: {
-        onPress: this.props.onPress,
-        recentVideos: this.props.recentVideos,
-        dribbleVideos: this.props.dribbleVideos,
-        shootVideos: this.props.shootVideos,
-        passVideos: this.props.passVideos,
-        trapVideos: this.props.trapVideos,
-        freeKickVideos: this.props.freeKickVideos,
-        currentItem: this.props.currentItem,
       },
     });
 

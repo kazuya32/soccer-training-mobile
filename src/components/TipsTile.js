@@ -15,7 +15,7 @@ class TipsTile extends React.Component {
     return (
       <View style={styles.tips}>
         <Text style={styles.tipsIndex}>
-          {`${index+1}`}
+          {`${index + 1}`}
         </Text>
         <Text style={styles.tipsItem}>
           {item}

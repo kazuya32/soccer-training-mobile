@@ -20,38 +20,26 @@ class MovieList extends React.Component {
         <Template
           tabLabel="新着"
           category="recent"
-          onPress={this.props.onPress}
-          videos={this.props.recentVideos}
         />
         <Template
           tabLabel="ドリブル"
           category="dribble"
-          onPress={this.props.onPress}
-          videos={this.props.dribbleVideos}
         />
         <Template
           tabLabel="シュート"
           category="shoot"
-          onPress={this.props.onPress}
-          videos={this.props.shootVideos}
         />
         <Template
           tabLabel="パ ス"
           category="pass"
-          onPress={this.props.onPress}
-          videos={this.props.passVideos}
         />
         <Template
           tabLabel="トラップ"
           category="trap"
-          onPress={this.props.onPress}
-          videos={this.props.trapVideos}
         />
         <Template
           tabLabel="フリーキック"
           category="freeKick"
-          onPress={this.props.onPress}
-          videos={this.props.freeKickVideos}
         />
       </ScrollableTabView>
     );

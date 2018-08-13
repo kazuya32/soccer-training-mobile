@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Alert, AsyncStorage } from 'react-native';
+import { Constants } from 'expo';
+import firebase from 'firebase';
 
 import ContentTile from './ContentTile.js';
 
@@ -7,34 +9,98 @@ class Template extends React.Component {
   state = {}
 
   componentWillMount() {
-    this.fetchVideos();
+    this.fetchVideos(this.props.category);
   }
 
-  fetchVideos = () => {
-    const { videos } = this.props;
-    this.setState({
-      videos,
+  // eslint-disable-next-line
+  fetchVideos = (category) => {
+    const db = firebase.firestore();
+    let videosRef;
+    if (category === 'recent') {
+      const maxResults = 10;
+      videosRef = db.collection('videos').orderBy('publishedAt', 'desc').limit(maxResults);
+    } else {
+      videosRef = db.collection('videos').where('category', '==', category);
+    }
+
+    let videos = [];
+    videosRef.get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          videos.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        videos = this.shuffle(videos);
+        this.setState({ videos });
+      });
+  }
+
+  shuffle = (array) => {
+    let currentIndex = array.length;
+    let temporaryValue;
+    let randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      // eslint-disable-next-line
+      array[currentIndex] = array[randomIndex];
+      // eslint-disable-next-line
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
+  updateSession = (videoUrl, video) => {
+    const db = firebase.firestore();
+    const sessionRef = db.collection('sessions').doc(Constants.sessionId);
+    sessionRef.set({
+      currentVideoUrl: videoUrl,
+      currentVideo: video,
     });
+  }
+
+  onPressTitle = (video) => {
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const withoutCommentRef = storageRef.child(`video/withoutComment/${video.id}.mp4`);
+    withoutCommentRef.getDownloadURL()
+      .then((videoUrl) => {
+        AsyncStorage.setItem('currentId', video.id);
+        this.updateSession(videoUrl, video);
+      })
+      .catch(() => {
+        const withCommentRef = storageRef.child(`video/withComment/${video.id}.mp4`);
+        withCommentRef.getDownloadURL()
+          .then((videoUrl) => {
+            AsyncStorage.setItem('currentId', video.id);
+            this.updateSession(videoUrl, video);
+          })
+          .catch(() => {
+            Alert.alert('この動画は現在アプリではみれません。');
+          });
+      });
   }
 
   keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ item, index }) => {
-    const { onPress } = this.props;
-    return (
-      <View style={styles.item}>
-        <ContentTile
-          onPress={() => onPress(item)}
-          thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}
-          title={item.data.youtubeData.snippet.title}
-          desc={item.data.youtubeData.snippet.description}
-          player={item.data.tags.player}
-          tags={item.data.tags.desc}
-          index={index}
-        />
-      </View>
-    );
-  }
+  renderItem = ({ item, index }) => (
+    <View style={styles.item}>
+      <ContentTile
+        onPress={() => this.onPressTitle(item)}
+        thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}
+        title={item.data.youtubeData.snippet.title}
+        desc={item.data.youtubeData.snippet.description}
+        player={item.data.tags.player}
+        tags={item.data.tags.desc}
+        index={index}
+      />
+    </View>
+  )
 
   render() {
     if (!this.state.videos) {

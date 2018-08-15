@@ -5,11 +5,28 @@ import {
   Text,
   TouchableHighlight,
   Image,
-  AsyncStorage,
 } from 'react-native';
+import { Constants } from 'expo';
+import firebase from 'firebase';
 
 class ContentTile extends React.Component {
   state = {}
+
+  componentDidMount() {
+    this.fetchSession();
+  }
+
+  fetchSession = () => {
+    const { title } = this.props;
+    const db = firebase.firestore();
+    const sessionRef = db.collection('sessions').doc(Constants.sessionId);
+    sessionRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        const currentVideoId = doc.data().currentVideo.id;
+        this.setState({ active: (currentVideoId === title) });
+      }
+    });
+  }
 
   render() {
     const {
@@ -21,10 +38,6 @@ class ContentTile extends React.Component {
       tags,
       // index,
     } = this.props;
-
-    AsyncStorage.getItem('currentId', (err, result) => {
-      this.setState({ active: (result === title) });
-    });
 
     return (
       <TouchableHighlight style={styles.container} onPress={onPress} underlayColor="transparent">

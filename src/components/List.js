@@ -6,14 +6,9 @@ import TipsButton from '../elements/TipsButton.js';
 
 
 class List extends React.Component {
-  state = {}
-
-  // componentWillMount() {
-  //   this.setState({ item: this.props.navigation.getParam('initialItem') });
-  // }
-
   onButtonPress = async () => {
     const currentVideoId = await AsyncStorage.getItem('currentId');
+    
     if (!currentVideoId || (currentVideoId === 'intro')) {
       Alert.alert('動画を選んでください。');
     } else {

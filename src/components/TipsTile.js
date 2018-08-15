@@ -11,18 +11,16 @@ class TipsTile extends React.Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ item, index }) => {
-    return (
-      <View style={styles.tips}>
-        <Text style={styles.tipsIndex}>
-          {`${index + 1}`}
-        </Text>
-        <Text style={styles.tipsItem}>
-          {item}
-        </Text>
-      </View>
-    );
-  }
+  renderItem = ({ item, index }) => (
+    <View style={styles.tips}>
+      <Text style={styles.tipsIndex}>
+        {`${index + 1}`}
+      </Text>
+      <Text style={styles.tipsItem}>
+        {item}
+      </Text>
+    </View>
+  )
 
 
   render() {
@@ -38,7 +36,6 @@ class TipsTile extends React.Component {
             {title}
           </Text>
         </View>
-
         <FlatList
           data={tipsArray}
           renderItem={this.renderItem}

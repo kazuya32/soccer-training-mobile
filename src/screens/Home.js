@@ -23,9 +23,6 @@ const BANNER_ID = ENV.ADMOB_BANNER_ID;
 
 
 class Home extends React.Component {
-  state = {
-  }
-
   componentWillMount() {
     AsyncStorage.setItem('currentId', 'intro');
   }

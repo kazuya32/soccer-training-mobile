@@ -56,6 +56,7 @@ class Template extends React.Component {
   }
 
   updateSession = (videoUrl, video) => {
+    AsyncStorage.setItem('currentId', video.id);
     const db = firebase.firestore();
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.set({
@@ -70,14 +71,12 @@ class Template extends React.Component {
     const withoutCommentRef = storageRef.child(`video/withoutComment/${video.id}.mp4`);
     withoutCommentRef.getDownloadURL()
       .then((videoUrl) => {
-        AsyncStorage.setItem('currentId', video.id);
         this.updateSession(videoUrl, video);
       })
       .catch(() => {
         const withCommentRef = storageRef.child(`video/withComment/${video.id}.mp4`);
         withCommentRef.getDownloadURL()
           .then((videoUrl) => {
-            AsyncStorage.setItem('currentId', video.id);
             this.updateSession(videoUrl, video);
           })
           .catch(() => {
@@ -118,6 +117,7 @@ class Template extends React.Component {
             data={this.state.videos}
             renderItem={this.renderItem}
             keyExtractor={this.keyExtractor}
+            // extraData={this.state}
           />
         </View>
       </View>

@@ -46,6 +46,7 @@ class MovieList extends React.Component {
   }
 }
 
+
 const styles = StyleSheet.create({
   header: {
     shadowColor: '#000',

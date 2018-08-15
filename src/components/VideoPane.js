@@ -1,5 +1,4 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native';
 import {
   Video,
   Constants,
@@ -22,9 +21,8 @@ class VideoPane extends React.Component {
       if (doc.exists) {
         // eslint-disable-next-line
         console.log('doc exists');
-        const videoId = doc.data().currentVideo.id;
+        // const videoId = doc.data().currentVideo.id;
         const videoUrl = doc.data().currentVideoUrl;
-        AsyncStorage.setItem('currentId', videoId);
         this.setState({ videoUrl });
       } else {
         // eslint-disable-next-line

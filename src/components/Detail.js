@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { Constants } from 'expo';
 import firebase from 'firebase';
 
 import MovieButton from '../elements/MovieButton.js';
@@ -10,34 +11,52 @@ import UrlTile from './UrlTile.js';
 class Detail extends React.Component {
   state = {}
 
-  componentWillMount() {
-    this.fetchVideoData();
+  // componentWillMount() {
+  //   this.fetchVideoData();
+  // }
+  //
+  // fetchVideoData = () => {
+  //   const currentVideoId = this.props.navigation.getParam('currentVideoId');
+  //
+  //   const db = firebase.firestore();
+  //   const videoRef = db.collection('videos').doc(currentVideoId);
+  //   videoRef.get().then((doc) => {
+  //     if (doc.exists) {
+  //       const video = { id: doc.id, data: doc.data() };
+  //       this.setState({ video });
+  //     } else {
+  //       Alert.alert('エラーが起こりました。');
+  //       this.props.navigation.goBack();
+  //     }
+  //   }).catch((error) => {
+  //     // eslint-disable-next-line
+  //     console.error('Error getting document: ', error);
+  //     Alert.alert('エラーが起こりました。');
+  //   });
+  // }
+
+  componentDidMount() {
+    this.fetchSession();
   }
 
-  fetchVideoData = () => {
-    const currentVideoId = this.props.navigation.getParam('currentVideoId');
-
+  fetchSession = () => {
     const db = firebase.firestore();
-    const videoRef = db.collection('videos').doc(currentVideoId);
-    videoRef.get().then((doc) => {
+    const sessionRef = db.collection('sessions').doc(Constants.sessionId);
+    sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
-        const video = { id: doc.id, data: doc.data() };
+        const video = doc.data().currentVideo;
         this.setState({ video });
       } else {
-        Alert.alert('エラーが起こりました。');
+        Alert.alert('エラーが発生しました。');
         this.props.navigation.goBack();
       }
-    }).catch((error) => {
-      // eslint-disable-next-line
-      console.error('Error getting document: ', error);
-      Alert.alert('エラーが起こりました。');
     });
   }
 
   render() {
     if (!this.state.video) {
       return (
-        <View style={{ flex: 1, padding: 100, alignSelf: 'center' }}>
+        <View style={[styles.container, { padding: 100, alignSelf: 'center' }]}>
           <ActivityIndicator />
         </View>
       );

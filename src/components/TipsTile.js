@@ -29,8 +29,14 @@ class TipsTile extends React.Component {
       tipsArray,
     } = this.props;
 
+    if (!(tipsArray && tipsArray.length)) { return null; }
+
     return (
-      <View style={styles.container} >
+      <View
+        style={[
+          styles.container,
+        ]}
+      >
         <View style={styles.title}>
           <Text style={styles.titleText}>
             {title}

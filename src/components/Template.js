@@ -79,7 +79,9 @@ class Template extends React.Component {
           .then((videoUrl) => {
             this.updateSession(videoUrl, video);
           })
-          .catch(() => {
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.log(error);
             Alert.alert('この動画は現在アプリではみれません。');
           });
       });

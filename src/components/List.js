@@ -14,7 +14,7 @@ class List extends React.Component {
     } else {
       this.props.navigation.navigate({
         routeName: 'Detail',
-        params: { currentVideoId },
+        // params: { currentVideoId },
         // key: 'Detail' + currentVideoId,
       });
     }

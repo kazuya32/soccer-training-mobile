@@ -51,12 +51,12 @@ class Template extends React.Component {
       // eslint-disable-next-line
       array[randomIndex] = temporaryValue;
     }
-
     return array;
   }
 
   updateSession = (videoUrl, video) => {
     AsyncStorage.setItem('currentId', video.id);
+
     const db = firebase.firestore();
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.set({

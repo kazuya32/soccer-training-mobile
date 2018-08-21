@@ -19,7 +19,7 @@ class VideoPane extends React.Component {
   }
 
   componentWillMount() {
-    // Dimensions.addEventListener('change', this.setDimensions);
+    Dimensions.addEventListener('change', this.setDimensions);
   }
 
   componentDidMount() {

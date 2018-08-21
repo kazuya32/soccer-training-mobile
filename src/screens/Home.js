@@ -2,7 +2,6 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Dimensions,
   AsyncStorage,
 } from 'react-native';
 import {
@@ -10,6 +9,7 @@ import {
   AdMobInterstitial,
   // PublisherBanner,
   AdMobRewarded,
+  ScreenOrientation,
 } from 'expo';
 
 import ENV from '../../env.json';
@@ -25,6 +25,7 @@ const BANNER_ID = ENV.ADMOB_BANNER_ID;
 class Home extends React.Component {
   componentWillMount() {
     AsyncStorage.setItem('currentId', 'intro');
+    ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
   }
 
   // eslint-disable-next-line
@@ -44,28 +45,6 @@ class Home extends React.Component {
     await AdMobRewarded.requestAdAsync();
     await AdMobRewarded.showAdAsync();
   };
-
-  // eslint-disable-next-line
-  // dangerous = () => {
-  //     const db = firebase.firestore();
-  //     videosRef = db.collection('videos');
-  //     videosRef.get()
-  //       .then((querySnapshot) => {
-  //         querySnapshot.forEach((doc) => {
-  //           ref = db.collection('videos').doc(doc.id);
-  //           ref.update({
-  //               "advanced": [],
-  //               "failure": [],
-  //               "practice": [],
-  //               "point": [],
-  //               "advice": '',
-  //           })
-  //           .then(function() {
-  //               console.log("Document successfully updated!");
-  //           });
-  //         });
-  //       });
-  // }
 
   render() {
     return (
@@ -98,11 +77,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   videoPlayer: {
-    height: Dimensions.get('window').width * 0.6,
-    width: Dimensions.get('window').width,
-    alignSelf: 'center',
-    zIndex: 50,
+    zIndex: 100,
   },
 });
 
 export default Home;
+
+// eslint-disable-next-line
+// dangerous = () => {
+//     const db = firebase.firestore();
+//     videosRef = db.collection('videos');
+//     videosRef.get()
+//       .then((querySnapshot) => {
+//         querySnapshot.forEach((doc) => {
+//           ref = db.collection('videos').doc(doc.id);
+//           ref.update({
+//               "advanced": [],
+//               "failure": [],
+//               "practice": [],
+//               "point": [],
+//               "advice": '',
+//           })
+//           .then(function() {
+//               console.log("Document successfully updated!");
+//           });
+//         });
+//       });
+// }

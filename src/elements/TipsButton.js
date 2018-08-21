@@ -5,10 +5,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 class TipsButton extends React.Component {
   render() {
-    const { onPress } = this.props;
+    const { onPress, style, buttonEnabled } = this.props;
+
+    if (!buttonEnabled) { return null; }
 
     return (
-      <TouchableHighlight onPress={onPress} style={styles.container} underlayColor="transparent">
+      <TouchableHighlight onPress={onPress} style={[styles.container, style]} underlayColor="transparent">
         <Icon name="soccer-ball-o" size={34} style={styles.button} />
       </TouchableHighlight>
     );
@@ -17,12 +19,8 @@ class TipsButton extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 32,
-    right: 32,
     width: 48,
     height: 48,
-    zIndex: 100,
     backgroundColor: '#1BBA53',
     justifyContent: 'center',
     alignContent: 'center',
@@ -36,8 +34,6 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: 'center',
     color: 'black',
-    // borderRadius: 48 * 0.5,
-
   },
 });
 

@@ -62,7 +62,7 @@ class Template extends React.Component {
     sessionRef.set({
       currentVideoUrl: videoUrl,
       currentVideo: video,
-    });
+    }, { merge: true });
   }
 
   onPressTitle = (video) => {

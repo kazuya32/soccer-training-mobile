@@ -22,7 +22,7 @@ class ContentTile extends React.Component {
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
-        const currentVideoId = doc.data().currentVideo.id;
+        const currentVideoId = doc.data().currentVideo && doc.data().currentVideo.id;
         this.setState({ active: (currentVideoId === title) });
       }
     });

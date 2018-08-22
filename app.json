@@ -6,9 +6,9 @@
     "privacy": "public",
     "sdkVersion": "28.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "default",
-    "icon": "./assets/SoccerHackerIcon.png",
+    "icon": "./assets/SoccerHackerIcon144-android.png",
     "splash": {
       "image": "./assets/SoccerHackerSplash.png",
       "resizeMode": "cover",

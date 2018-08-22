@@ -94,6 +94,7 @@ class VideoPane extends React.Component {
           isMuted
           resizeMode={this.state.resizeMode}
           shouldPlay
+          positionMillis={0}
           isLooping
           useNativeControls
           // shouldCorrectPitch

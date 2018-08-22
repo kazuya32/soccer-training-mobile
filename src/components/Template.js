@@ -134,14 +134,11 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     marginTop: 10,
-    // paddingBottom: 10,
     width: '100%',
     justifyContent: 'flex-start',
   },
   item: {
     marginBottom: 4,
-    // marginLeft: 20,
-    // marginRight: 20,
   },
 });
 

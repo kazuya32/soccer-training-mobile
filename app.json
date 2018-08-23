@@ -6,9 +6,9 @@
     "privacy": "public",
     "sdkVersion": "28.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.2",
+    "version": "1.1.2",
     "orientation": "default",
-    "icon": "./assets/SoccerHackerIcon144-android.png",
+    "icon": "./assets/SoccerHackerIcon144-ios.png",
     "splash": {
       "image": "./assets/SoccerHackerSplash.png",
       "resizeMode": "cover",
@@ -25,7 +25,9 @@
       "bundleIdentifier": "com.lifting.ios"
     },
     "android": {
-      "package": "com.lifting.android"
+      "package": "com.lifting.android",
+      "versionCode": 2,
+      "icon": "./assets/SoccerHackerIcon144-android.png"
     },
   }
 }

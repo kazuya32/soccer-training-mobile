@@ -90,17 +90,11 @@ class Template extends React.Component {
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => (
-    <View style={styles.item}>
-      <ContentTile
-        onPress={() => this.onPressTitle(item)}
-        thumbnailUrl={item.data.youtubeData.snippet.thumbnails.high.url}
-        title={item.data.youtubeData.snippet.title}
-        desc={item.data.youtubeData.snippet.description}
-        player={item.data.tags.player}
-        tags={item.data.tags.desc}
-        index={index}
-      />
-    </View>
+    <ContentTile
+      onPress={() => this.onPressTitle(item)}
+      video={item}
+      withAd={index !== 0 && index % 6 === 0}
+    />
   )
 
   render() {
@@ -136,9 +130,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     justifyContent: 'flex-start',
-  },
-  item: {
-    marginBottom: 4,
   },
 });
 

@@ -9,6 +9,8 @@ import {
 import { Constants } from 'expo';
 import firebase from 'firebase';
 
+import AdTile from '../elements/AdTile.js';
+
 class ContentTile extends React.Component {
   state = {}
 
@@ -17,7 +19,8 @@ class ContentTile extends React.Component {
   }
 
   fetchSession = () => {
-    const { title } = this.props;
+    const { video } = this.props;
+    const { title } = video.data.youtubeData.snippet;
     const db = firebase.firestore();
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.onSnapshot((doc) => {
@@ -31,30 +34,39 @@ class ContentTile extends React.Component {
   render() {
     const {
       onPress,
-      thumbnailUrl,
-      title,
-      // desc,
-      player,
-      tags,
-      // index,
+      video,
+      withAd,
     } = this.props;
+
+    const thumbnailUrl = video.data.youtubeData.snippet.thumbnails.high.url;
+    // const { title } = video.data.youtubeData.snippet;
+    // const desc = video.data.youtubeData.snippet.description;
+    const { player } = video.data.tags;
+    const tags = video.data.tags.desc;
 
     return (
       <TouchableHighlight style={styles.container} onPress={onPress} underlayColor="transparent">
-        <View style={styles.tile}>
-          <Image
-            style={styles.thumbnail}
-            source={{ uri: thumbnailUrl }}
-            resizeMode="cover"
-          />
-          <View style={styles.caption}>
-            <Text style={[styles.skill, this.state.active && styles.skillActive]}>
-              {tags.join('の')}
-            </Text>
-            <Text style={styles.player}>
-              {player.join(', ').replace('選手', '')}
-            </Text>
+        <View>
+          <View
+            style={[styles.tile, withAd && { marginBottom: 4 }]}
+          >
+            <Image
+              style={styles.thumbnail}
+              source={{ uri: thumbnailUrl }}
+              resizeMode="cover"
+            />
+            <View style={styles.caption}>
+              <Text style={[styles.skill, this.state.active && styles.skillActive]}>
+                {tags.join('の')}
+              </Text>
+              <Text style={styles.player}>
+                {player.join(', ').replace('選手', '')}
+              </Text>
+            </View>
           </View>
+          <AdTile
+            show={withAd}
+          />
         </View>
       </TouchableHighlight>
     );
@@ -63,6 +75,7 @@ class ContentTile extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    marginBottom: 4,
   },
   tile: {
     flexDirection: 'row',
@@ -84,8 +97,6 @@ const styles = StyleSheet.create({
   },
   player: {
     color: 'gray',
-    // paddingLeft: 8,
-    // paddingRight: 8,
   },
   skill: {
     color: '#fff',
@@ -93,8 +104,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingTop: 8,
     paddingBottom: 8,
-    // paddingLeft: 8,
-    // paddingRight: 8,
   },
   skillActive: {
     color: '#1BBA53',

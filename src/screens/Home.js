@@ -53,16 +53,16 @@ class Home extends React.Component {
           style={styles.videoPlayer}
         />
         <UnderPane />
-        <AdMobBanner
-          bannerSize="smartBannerPortrait"
-          adUnitID={BANNER_ID}
-          didFailToReceiveAdWithError={this.bannerError}
-        />
       </View>
     );
   }
 }
 
+// <AdMobBanner
+//   bannerSize="smartBannerPortrait"
+//   adUnitID={BANNER_ID}
+//   didFailToReceiveAdWithError={this.bannerError}
+// />
 // <PublisherBanner
 //   bannerSize="fullBanner"
 //   style={{ display: 'none' }}

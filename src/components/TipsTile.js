@@ -22,7 +22,6 @@ class TipsTile extends React.Component {
     </View>
   )
 
-
   render() {
     const {
       title,
@@ -53,8 +52,6 @@ class TipsTile extends React.Component {
   }
 }
 
-// `＜ ${title} ＞`
-
 const styles = StyleSheet.create({
   container: {
   },
@@ -66,7 +63,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#102330',
   },
   tipsPane: {
-    // backgroundColor: '#fff',
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 28,
@@ -74,10 +70,6 @@ const styles = StyleSheet.create({
   },
   tips: {
     flexDirection: 'row',
-    // paddingTop: 8,
-    // paddingBottom: 8,
-    // paddingLeft: 28,
-    // paddingRight: 28,
   },
   titleText: {
     color: '#fff',
@@ -85,7 +77,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tipsItem: {
-    // color: '#102330',
     color: '#fff',
     fontSize: 18,
     paddingTop: 4,

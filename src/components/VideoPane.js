@@ -79,10 +79,9 @@ class VideoPane extends React.Component {
         <View
           style={[
             styles.indicator,
-            this.state.loaded && { display: 'none' },
           ]}
         >
-          <ActivityIndicator />
+          <ActivityIndicator animating={!this.state.loaded} />
         </View>
         <Video
           // ref={ref => (this.video = ref)}
@@ -109,16 +108,6 @@ class VideoPane extends React.Component {
     );
   }
 }
-
-// <View
-//   style={[
-//     { flex: 1, padding: 100, alignSelf: 'center' },
-//
-//   ]}
-// >
-//   <ActivityIndicator />
-// </View>
-
 
 const styles = StyleSheet.create({
   indicator: {

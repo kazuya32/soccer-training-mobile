@@ -54,44 +54,10 @@ class Template extends React.Component {
     return array;
   }
 
-  updateSession = (videoUrl, video) => {
-    AsyncStorage.setItem('currentId', video.id);
-
-    const db = firebase.firestore();
-    const sessionRef = db.collection('sessions').doc(Constants.sessionId);
-    sessionRef.set({
-      currentVideoUrl: videoUrl,
-      currentVideo: video,
-    }, { merge: true });
-  }
-
-  onPressTitle = (video) => {
-    const storage = firebase.storage();
-    const storageRef = storage.ref();
-    const withoutCommentRef = storageRef.child(`video/withoutComment/${video.id}.mp4`);
-    withoutCommentRef.getDownloadURL()
-      .then((videoUrl) => {
-        this.updateSession(videoUrl, video);
-      })
-      .catch(() => {
-        const withCommentRef = storageRef.child(`video/withComment/${video.id}.mp4`);
-        withCommentRef.getDownloadURL()
-          .then((videoUrl) => {
-            this.updateSession(videoUrl, video);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.log(error);
-            Alert.alert('この動画は現在アプリではみれません。');
-          });
-      });
-  }
-
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => (
     <ContentTile
-      onPress={() => this.onPressTitle(item)}
       video={item}
       withAd={index !== 0 && index % 6 === 0}
     />

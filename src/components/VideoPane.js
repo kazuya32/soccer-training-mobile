@@ -81,7 +81,7 @@ class VideoPane extends React.Component {
             styles.indicator,
           ]}
         >
-          <ActivityIndicator animating={!this.state.loaded} />
+          <ActivityIndicator animating={!this.state.loaded} size="large" color="#1BBA53" />
         </View>
         <Video
           // ref={ref => (this.video = ref)}

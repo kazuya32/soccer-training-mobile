@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator, Alert, AsyncStorage } from 'react-native';
-import { Constants } from 'expo';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import firebase from 'firebase';
 
+import designLanguage from '../../designLanguage.json';
 import ContentTile from './ContentTile.js';
 
 class Template extends React.Component {
@@ -90,10 +90,10 @@ class Template extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: designLanguage.color50,
   },
   listContainer: {
-    marginTop: 10,
+    // marginTop: 10,
     width: '100%',
     justifyContent: 'flex-start',
   },

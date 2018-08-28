@@ -14,6 +14,7 @@ import {
 } from 'expo';
 import firebase from 'firebase';
 
+import designLanguage from '../../designLanguage.json';
 import AdTile from '../elements/AdTile.js';
 import DownloadButton from '../elements/DownloadButton.js';
 
@@ -170,7 +171,7 @@ class ContentTile extends React.Component {
     const tags = video.data.tags.desc;
 
     return (
-      <TouchableHighlight style={styles.container} onPress={this.onPressContainer} underlayColor="transparent">
+      <TouchableHighlight style={[styles.container, this.state.active && { backgroundColor: designLanguage.color700 }]} onPress={this.onPressContainer} underlayColor="transparent">
         <View>
           <View
             style={[styles.tile, withAd && { marginBottom: 4 }]}
@@ -184,7 +185,7 @@ class ContentTile extends React.Component {
               <Text style={[styles.skill, this.state.active && styles.skillActive]}>
                 {tags.join('の')}
               </Text>
-              <Text style={styles.player}>
+              <Text style={[styles.player, this.state.active && styles.playerActive]}>
                 {player.join(', ').replace('選手', '')}
               </Text>
             </View>
@@ -194,6 +195,7 @@ class ContentTile extends React.Component {
               hasLocalDocument={this.state.hasLocalDocument}
               downloadProgress={this.state.downloadProgress}
               isLoading={this.state.isLoading}
+              active={this.state.active}
             />
           </View>
           <AdTile
@@ -211,13 +213,6 @@ const styles = StyleSheet.create({
   },
   tile: {
     flexDirection: 'row',
-    // backgroundColor: '#102330',
-    borderRadius: 8,
-    borderColor: '#808080',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.7,
-    shadowRadius: 3,
   },
   thumbnail: {
     flex: 2,
@@ -228,17 +223,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   player: {
-    color: 'gray',
+    color: designLanguage.color800,
+  },
+  playerActive: {
+    color: designLanguage.color100,
   },
   skill: {
-    color: '#fff',
-    fontWeight: '400',
-    fontSize: 18,
+    color: designLanguage.color900,
+    fontWeight: '500',
+    fontSize: 16,
     paddingTop: 8,
     paddingBottom: 8,
   },
   skillActive: {
-    color: '#1BBA53',
+    color: designLanguage.color50,
   },
   downloadButton: {
     flex:1,

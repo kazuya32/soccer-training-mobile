@@ -3,6 +3,7 @@ import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import { Pie } from 'react-native-progress';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import designLanguage from '../../designLanguage.json';
 
 class DownloadButton extends React.Component {
   state = {
@@ -22,10 +23,12 @@ class DownloadButton extends React.Component {
       hasLocalDocument,
       isLoading,
       downloadProgress,
+      active,
     } = this.props;
 
     const iconName = hasLocalDocument ? 'play-circle-outline' : 'download';
     const iconSize = hasLocalDocument ? 28 : 24;
+    const fontColor = active ? designLanguage.color50 : designLanguage.colorPrimary;
 
     if (isLoading) {
       return (
@@ -36,7 +39,7 @@ class DownloadButton extends React.Component {
             progress={downloadProgress}
             size={24}
             borderWidth={0}
-            color="#1BBA53"
+            color={fontColor}
             style={{ alignSelf: 'center' }}
             endAngle={1}
           />
@@ -55,7 +58,8 @@ class DownloadButton extends React.Component {
           size={iconSize}
           style={[
             styles.button,
-            hasLocalDocument && { color: '#1BBA53' },
+            { color: fontColor },
+            // hasLocalDocument && { color: designLanguage.colorPrimary },
           ]}
         />
       </TouchableHighlight>
@@ -69,7 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    color: '#fff',
     textAlign: 'center',
   },
 });

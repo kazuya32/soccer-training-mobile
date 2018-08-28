@@ -12,6 +12,7 @@ import {
   ScreenOrientation,
 } from 'expo';
 
+import designLanguage from '../../designLanguage.json';
 import ENV from '../../env.json';
 import UnderPane from '../components/UnderPane.js';
 import VideoPane from '../components/VideoPane.js';
@@ -74,7 +75,7 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: designLanguage.color900,
   },
   videoPlayer: {
     zIndex: 100,

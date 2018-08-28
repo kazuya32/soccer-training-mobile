@@ -11,6 +11,7 @@ class UnderPane extends React.Component {
       Detail: { screen: Detail },
     }, {
       headerMode: 'none',
+      mode: 'modal',
       initialRouteParams: {
       },
     });

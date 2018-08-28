@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, Alert, ActivityIndicator } from 'react-na
 import { Constants } from 'expo';
 import firebase from 'firebase';
 
+import designLanguage from '../../designLanguage.json';
 import MovieButton from '../elements/MovieButton.js';
 import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: '#102330',
-    backgroundColor: 'black',
+    backgroundColor: designLanguage.color50,
   },
 });
 

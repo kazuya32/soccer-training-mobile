@@ -6,6 +6,8 @@ import {
   FlatList,
 } from 'react-native';
 
+import designLanguage from '../../designLanguage.json';
+
 class TipsTile extends React.Component {
   state = {}
 
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: '#102330',
+    backgroundColor: designLanguage.color900,
   },
   tipsPane: {
     paddingTop: 8,
@@ -77,13 +79,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tipsItem: {
-    color: '#fff',
+    color: designLanguage.color900,
     fontSize: 18,
     paddingTop: 4,
     alignSelf: 'flex-start',
   },
   tipsIndex: {
-    color: '#fff',
+    color: designLanguage.color900,
     fontSize: 18,
     alignSelf: 'flex-start',
     width: 16,

@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, TouchableHighlight } from 'react-native';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import designLanguage from '../../designLanguage.json';
 
 class MovieButton extends React.Component {
   render() {
@@ -25,12 +26,11 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     zIndex: 100,
-    backgroundColor: '#1BBA53',
+    backgroundColor: designLanguage.colorPrimary,
     justifyContent: 'center',
     alignContent: 'center',
-    borderColor: '#102330',
-    shadowColor: '#102330',
-    shadowOffset: { width: 0, height: 0 },
+    shadowColor: designLanguage.color900,
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.7,
     shadowRadius: 3,
     borderRadius: 24,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'center',
-    color: 'black',
+    color: designLanguage.color50,
   },
 });
 

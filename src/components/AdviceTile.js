@@ -5,6 +5,8 @@ import {
   Text,
 } from 'react-native';
 
+import designLanguage from '../../designLanguage.json';
+
 class AdviceTile extends React.Component {
   state = {}
 
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: '#102330',
+    backgroundColor: designLanguage.color900,
   },
   tips: {
     paddingTop: 8,
@@ -50,12 +52,12 @@ const styles = StyleSheet.create({
     paddingRight: 28,
   },
   titleText: {
-    color: '#fff',
+    color: designLanguage.color50,
     fontSize: 18,
     fontWeight: '600',
   },
   tipsItem: {
-    color: '#fff',
+    color: designLanguage.color900,
     fontSize: 18,
   },
 });

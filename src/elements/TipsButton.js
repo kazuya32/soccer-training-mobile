@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, TouchableHighlight } from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import designLanguage from '../../designLanguage.json';
 
 class TipsButton extends React.Component {
   render() {
@@ -21,19 +22,18 @@ const styles = StyleSheet.create({
   container: {
     width: 48,
     height: 48,
-    backgroundColor: '#1BBA53',
+    backgroundColor: designLanguage.colorPrimary,
     justifyContent: 'center',
     alignContent: 'center',
-    borderColor: '#102330',
-    shadowColor: '#102330',
-    shadowOffset: { width: 0, height: 0 },
+    shadowColor: designLanguage.color900,
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.7,
     shadowRadius: 3,
     borderRadius: 24,
   },
   button: {
     alignSelf: 'center',
-    color: 'black',
+    color: designLanguage.color50,
   },
 });
 

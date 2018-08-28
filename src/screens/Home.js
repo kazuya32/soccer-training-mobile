@@ -75,7 +75,7 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: designLanguage.color900,
+    backgroundColor: designLanguage.color50,
   },
   videoPlayer: {
     zIndex: 100,

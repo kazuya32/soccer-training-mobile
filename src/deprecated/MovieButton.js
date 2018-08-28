@@ -6,7 +6,9 @@ import designLanguage from '../../designLanguage.json';
 
 class MovieButton extends React.Component {
   render() {
-    const { onPress } = this.props;
+    const { onPress, buttonEnabled } = this.props;
+
+    if (!buttonEnabled) { return null; }
 
     return (
       <TouchableHighlight onPress={onPress} style={styles.container} underlayColor="transparent">

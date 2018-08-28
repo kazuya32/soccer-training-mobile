@@ -4,14 +4,15 @@ import { Constants } from 'expo';
 import firebase from 'firebase';
 
 import designLanguage from '../../designLanguage.json';
-import MovieButton from '../elements/MovieButton.js';
+import CloseButton from '../elements/CloseButton.js';
 import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
 import UrlTile from './UrlTile.js';
 
 class Detail extends React.Component {
-  state = {}
-
+  state = {
+    buttonEnabled: true,
+  }
   // componentWillMount() {
   //   this.fetchVideoData();
   // }
@@ -46,7 +47,8 @@ class Detail extends React.Component {
     sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
         const video = doc.data().currentVideo;
-        this.setState({ video });
+        const { buttonEnabled } = doc.data();
+        this.setState({ video, buttonEnabled });
       } else {
         Alert.alert('エラーが発生しました。');
         this.props.navigation.goBack();
@@ -57,15 +59,16 @@ class Detail extends React.Component {
   render() {
     if (!this.state.video) {
       return (
-        <View style={[styles.container, { padding: 100, alignSelf: 'center' }]}>
-          <ActivityIndicator />
+        <View style={[styles.indicator]}>
+          <ActivityIndicator animating={!this.state.loaded} size="large" color={designLanguage.colorPrimary} />
         </View>
       );
     }
 
     return (
       <View style={styles.container}>
-        <MovieButton
+        <CloseButton
+          buttonEnabled={this.state.buttonEnabled}
           onPress={() => {
             this.props.navigation.navigate({
               routeName: 'List',
@@ -109,6 +112,13 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: '#102330',
     backgroundColor: designLanguage.color50,
+  },
+  indicator: {
+    flex: 1,
+    backgroundColor: designLanguage.color50,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

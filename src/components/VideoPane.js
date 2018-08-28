@@ -11,6 +11,8 @@ import {
 } from 'expo';
 import firebase from 'firebase';
 
+import designLanguage from '../../designLanguage.json';
+
 class VideoPane extends React.Component {
   state = {
     videoUrl: 'https://firebasestorage.googleapis.com/v0/b/lifting-cb667.appspot.com/o/video%2FwithoutComment%2FYoutube%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB%E7%B4%B9%E4%BB%8B%E3%83%92%E3%82%99%E3%83%86%E3%82%99%E3%82%AA.mp4?alt=media&token=d307512f-92b3-463d-be8c-9e9c1d814bab',
@@ -81,7 +83,7 @@ class VideoPane extends React.Component {
             styles.indicator,
           ]}
         >
-          <ActivityIndicator animating={!this.state.loaded} size="large" color="#1BBA53" />
+          <ActivityIndicator animating={!this.state.loaded} size="large" color={designLanguage.colorPrimary} />
         </View>
         <Video
           // ref={ref => (this.video = ref)}

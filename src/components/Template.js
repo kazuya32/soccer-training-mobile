@@ -66,8 +66,8 @@ class Template extends React.Component {
   render() {
     if (!this.state.videos) {
       return (
-        <View style={{ flex: 1, padding: 20 }}>
-          <ActivityIndicator />
+        <View style={[styles.indicator]}>
+          <ActivityIndicator animating={!this.state.loaded} size="large" color={designLanguage.colorPrimary} />
         </View>
       );
     }
@@ -91,6 +91,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: designLanguage.color50,
+  },
+  indicator: {
+    flex: 1,
+    backgroundColor: designLanguage.color50,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   listContainer: {
     // marginTop: 10,

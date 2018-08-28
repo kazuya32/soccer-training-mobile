@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Alert, AsyncStorage } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Constants } from 'expo';
 import firebase from 'firebase';
 
@@ -10,6 +10,7 @@ import TipsButton from '../elements/TipsButton.js';
 class List extends React.Component {
   state = {
     buttonEnabled: true,
+    currentVideo: false,
   }
 
   componentDidMount() {
@@ -21,22 +22,16 @@ class List extends React.Component {
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
-        const { buttonEnabled } = doc.data();
-        this.setState({ buttonEnabled });
+        const { currentVideo, buttonEnabled } = doc.data();
+        this.setState({ currentVideo, buttonEnabled });
       }
     });
   }
 
   onButtonPress = async () => {
-    const currentVideoId = await AsyncStorage.getItem('currentId');
-
-    if (!currentVideoId || (currentVideoId === 'intro')) {
-      Alert.alert('動画を選んでください。');
-    } else {
-      this.props.navigation.navigate({
-        routeName: 'Detail',
-      });
-    }
+    this.props.navigation.navigate({
+      routeName: 'Detail',
+    });
   }
 
   render() {
@@ -49,6 +44,7 @@ class List extends React.Component {
             styles.tipsButton,
           ]}
           buttonEnabled={this.state.buttonEnabled}
+          hasContent={this.state.currentVideo}
         />
       </View>
     );

@@ -5,7 +5,6 @@ import {
   Text,
   TouchableHighlight,
   Image,
-  AsyncStorage,
   Alert,
 } from 'react-native';
 import {
@@ -60,8 +59,6 @@ class ContentTile extends React.Component {
   }
 
   updateSession = (videoUrl, video) => {
-    AsyncStorage.setItem('currentId', video.id);
-
     const db = firebase.firestore();
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.set({

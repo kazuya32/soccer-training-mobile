@@ -2,7 +2,6 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  AsyncStorage,
 } from 'react-native';
 import {
   AdMobBanner,
@@ -30,13 +29,13 @@ class Home extends React.Component {
   state = {
     initialized: false,
     introRemoteUri: movieList.introduction,
+    // progress: 1,
     // introRemoteUri: movieList.test,
   }
 
   componentWillMount() {
-    AsyncStorage.setItem('currentId', 'intro');
-    ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
     this.fetchDefaultVideo();
+    ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
   }
 
   // eslint-disable-next-line

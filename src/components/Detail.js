@@ -9,33 +9,21 @@ import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
 import UrlTile from './UrlTile.js';
 
+const defaultDesc = 'このアプリはプロのサッカー選手を目指すための技術を紹介しています。' +
+  'サッカーの実践スキルを習得したい人や練習を指導する方のお役に立てると思います。\n\n' +
+  '実践的なスキルを細かいポイントに分解することで' +
+  'アクションを起こしやすくしています。\n\n' +
+  'まずは好きなサッカー選手やスキルカテゴリの動画を選んで再生してみてください！';
+
 class Detail extends React.Component {
   state = {
     buttonEnabled: true,
+    video: {
+      data: {
+        advice: defaultDesc,
+      },
+    },
   }
-  // componentWillMount() {
-  //   this.fetchVideoData();
-  // }
-  //
-  // fetchVideoData = () => {
-  //   const currentVideoId = this.props.navigation.getParam('currentVideoId');
-  //
-  //   const db = firebase.firestore();
-  //   const videoRef = db.collection('videos').doc(currentVideoId);
-  //   videoRef.get().then((doc) => {
-  //     if (doc.exists) {
-  //       const video = { id: doc.id, data: doc.data() };
-  //       this.setState({ video });
-  //     } else {
-  //       Alert.alert('エラーが起こりました。');
-  //       this.props.navigation.goBack();
-  //     }
-  //   }).catch((error) => {
-  //     // eslint-disable-next-line
-  //     console.error('Error getting document: ', error);
-  //     Alert.alert('エラーが起こりました。');
-  //   });
-  // }
 
   componentDidMount() {
     this.fetchSession();
@@ -48,7 +36,11 @@ class Detail extends React.Component {
       if (doc.exists) {
         const video = doc.data().currentVideo;
         const { buttonEnabled } = doc.data();
-        this.setState({ video, buttonEnabled });
+        if (video) {
+          this.setState({ video, buttonEnabled });
+        } else {
+          this.setState({ buttonEnabled });
+        }
       } else {
         Alert.alert('エラーが発生しました。');
         this.props.navigation.goBack();
@@ -65,17 +57,10 @@ class Detail extends React.Component {
       );
     }
 
+    const adviceTileName = this.state.video.id ? '実践アドバイス' : 'このアプリについて';
+
     return (
       <View style={styles.container}>
-        <CloseButton
-          buttonEnabled={this.state.buttonEnabled}
-          onPress={() => {
-            this.props.navigation.navigate({
-              routeName: 'List',
-              // params: item,
-            });
-          }}
-        />
         <ScrollView >
           <TipsTile
             title="スキルのポイント"
@@ -94,14 +79,24 @@ class Detail extends React.Component {
             tipsArray={this.state.video && this.state.video.data.advanced}
           />
           <AdviceTile
-            title="実践アドバイス"
+            title={adviceTileName}
             comment={this.state.video && this.state.video.data.advice}
           />
           <UrlTile
+            show={!this.state.video.id}
             title="酒井潤公式HP"
             url="http://sakaijunsoccer.appspot.com/soccer"
           />
         </ScrollView>
+        <CloseButton
+          style={styles.button}
+          buttonEnabled={this.state.buttonEnabled}
+          onPress={() => {
+            this.props.navigation.navigate({
+              routeName: 'List',
+            });
+          }}
+        />
       </View>
     );
   }
@@ -119,6 +114,12 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    position: 'absolute',
+    bottom: 32,
+    right: 32,
+    zIndex: 30,
   },
 });
 

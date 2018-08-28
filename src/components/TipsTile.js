@@ -58,17 +58,17 @@ const styles = StyleSheet.create({
   container: {
   },
   title: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 24,
+    paddingRight: 24,
     backgroundColor: designLanguage.color900,
   },
   tipsPane: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 28,
-    paddingRight: 28,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   tips: {
     flexDirection: 'row',

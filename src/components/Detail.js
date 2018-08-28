@@ -61,7 +61,7 @@ class Detail extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView >
+        <ScrollView>
           <TipsTile
             title="スキルのポイント"
             tipsArray={this.state.video && this.state.video.data.point}

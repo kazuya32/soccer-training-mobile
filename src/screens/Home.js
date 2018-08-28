@@ -29,7 +29,6 @@ class Home extends React.Component {
   state = {
     initialized: false,
     introRemoteUri: movieList.introduction,
-    // progress: 1,
     // introRemoteUri: movieList.test,
   }
 
@@ -105,23 +104,25 @@ class Home extends React.Component {
   };
 
   render() {
+    const progressBar = this.state.progress ? (
+      <Circle
+        progress={this.state.progress}
+        size={120}
+        borderWidth={0}
+        color={designLanguage.colorPrimary}
+        style={{ alignSelf: 'center' }}
+        textStyle={{ fontSize: 32 }}
+        endAngle={1}
+        showsText
+        thickness={8}
+        strokeCap="round"
+      />
+    ) : null;
+
     if (!this.state.initialized) {
       return (
-        <View
-          style={[styles.container, { justifyContent: 'center' }]}
-        >
-          <Circle
-            progress={this.state.progress}
-            size={120}
-            borderWidth={0}
-            color={designLanguage.colorPrimary}
-            style={{ alignSelf: 'center' }}
-            textStyle={{ fontSize: 32 }}
-            endAngle={1}
-            showsText
-            thickness={8}
-            strokeCap="round"
-          />
+        <View style={[styles.container, { justifyContent: 'center' }]} >
+          {progressBar}
         </View>
       );
     }

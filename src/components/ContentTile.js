@@ -84,7 +84,6 @@ class ContentTile extends React.Component {
   writeDocument = async (remoteUri) => {
     const downloadResumable = FileSystem.createDownloadResumable(
       remoteUri,
-      // 'http://techslides.com/demos/sample-videos/small.mp4',
       this.state.localUri,
       {},
       this.setProgress,
@@ -209,7 +208,9 @@ class ContentTile extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 4,
+    marginBottom: 8,
+    paddingLeft: 4,
+    // paddingRight: 4,
   },
   tile: {
     flexDirection: 'row',

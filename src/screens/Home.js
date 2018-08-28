@@ -10,9 +10,12 @@ import {
   // PublisherBanner,
   AdMobRewarded,
   ScreenOrientation,
+  FileSystem,
 } from 'expo';
+import { Circle } from 'react-native-progress';
 
 import designLanguage from '../../designLanguage.json';
+import movieList from '../../movieList.json';
 import ENV from '../../env.json';
 import UnderPane from '../components/UnderPane.js';
 import VideoPane from '../components/VideoPane.js';
@@ -24,9 +27,16 @@ const BANNER_ID = ENV.ADMOB_BANNER_ID;
 
 
 class Home extends React.Component {
+  state = {
+    initialized: false,
+    introRemoteUri: movieList.introduction,
+    // introRemoteUri: movieList.test,
+  }
+
   componentWillMount() {
     AsyncStorage.setItem('currentId', 'intro');
     ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
+    this.fetchDefaultVideo();
   }
 
   // eslint-disable-next-line
@@ -35,6 +45,54 @@ class Home extends React.Component {
     // AdMobInterstitial.setTestDeviceID('EMULATOR');
     // AdMobRewarded.setAdUnitID(REWARDED_ID);
     // AdMobRewarded.setTestDeviceID('EMULATOR');
+  }
+
+  fetchDefaultVideo = () => {
+    const defaultFile = 'introduction.mp4';
+    // const defaultFile = 'test.mp4';
+    const defaultUri = `${FileSystem.documentDirectory}${defaultFile}`;
+    FileSystem.getInfoAsync(defaultUri)
+      .then(({ exists }) => {
+        if (exists) {
+          this.setState({ initialized: exists, defaultUri });
+        } else {
+          this.writeDocument(this.state.introRemoteUri, defaultUri);
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+      });
+  }
+
+  setProgress = (downloadProgress) => {
+    const progress =
+      downloadProgress.totalBytesWritten /
+      downloadProgress.totalBytesExpectedToWrite;
+    // eslint-disable-next-line
+    console.log(progress);
+    this.setState({
+      progress,
+    });
+  };
+
+  writeDocument = async (remoteUri, localUri) => {
+    const downloadResumable = FileSystem.createDownloadResumable(
+      remoteUri,
+      localUri,
+      {},
+      this.setProgress,
+    );
+
+    try {
+      const { uri } = await downloadResumable.downloadAsync();
+      // eslint-disable-next-line
+      console.log('Finished downloading to ', uri);
+      this.setState({ initialized: true, defaultUri: uri });
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e);
+    }
   }
 
   openInterstitial = async () => {
@@ -48,10 +106,32 @@ class Home extends React.Component {
   };
 
   render() {
+    if (!this.state.initialized) {
+      return (
+        <View
+          style={[styles.container, { justifyContent: 'center' }]}
+        >
+          <Circle
+            progress={this.state.progress}
+            size={120}
+            borderWidth={0}
+            color={designLanguage.colorPrimary}
+            style={{ alignSelf: 'center' }}
+            textStyle={{ fontSize: 32 }}
+            endAngle={1}
+            showsText
+            thickness={8}
+            strokeCap="round"
+          />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <VideoPane
           style={styles.videoPlayer}
+          defaultUri={this.state.defaultUri}
         />
         <UnderPane />
       </View>

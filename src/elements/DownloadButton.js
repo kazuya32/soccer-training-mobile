@@ -53,7 +53,6 @@ class DownloadButton extends React.Component {
           style={[
             styles.button,
             { color: fontColor },
-            // hasLocalDocument && { color: designLanguage.colorPrimary },
           ]}
         />
       </TouchableHighlight>

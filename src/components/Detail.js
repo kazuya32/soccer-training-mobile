@@ -4,6 +4,7 @@ import { Constants } from 'expo';
 import firebase from 'firebase';
 
 import designLanguage from '../../designLanguage.json';
+import defaultMovie from '../../defaultMovie.json';
 import CloseButton from '../elements/CloseButton.js';
 import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
@@ -18,15 +19,16 @@ const defaultDesc = 'このアプリはプロのサッカー選手を目指す�
 class Detail extends React.Component {
   state = {
     buttonEnabled: true,
-    video: {
-      data: {
-        advice: defaultDesc,
-      },
-    },
   }
 
   componentDidMount() {
     this.fetchSession();
+  }
+
+  onPressClose = () => {
+    this.props.navigation.navigate({
+      routeName: 'List',
+    });
   }
 
   fetchSession = () => {
@@ -39,7 +41,8 @@ class Detail extends React.Component {
         if (video) {
           this.setState({ video, buttonEnabled });
         } else {
-          this.setState({ buttonEnabled });
+          const defaultVideo = { id: defaultMovie.id, data: {} };
+          this.setState({ video: defaultVideo, buttonEnabled });
         }
       } else {
         Alert.alert('エラーが発生しました。');
@@ -52,12 +55,14 @@ class Detail extends React.Component {
     if (!this.state.video) {
       return (
         <View style={[styles.indicator]}>
-          <ActivityIndicator animating={!this.state.loaded} size="large" color={designLanguage.colorPrimary} />
+          <ActivityIndicator animating={!this.state.video} size="large" color={designLanguage.colorPrimary} />
         </View>
       );
     }
 
-    const adviceTileName = this.state.video.id ? '実践アドバイス' : 'このアプリについて';
+    const isDefault = this.state.video.id === defaultMovie.id;
+    const adviceTileName = isDefault ? 'このアプリについて' : '実践アドバイス';
+    const advice = isDefault ? defaultDesc : this.state.video.data.advice;
 
     return (
       <View style={styles.container}>
@@ -80,7 +85,7 @@ class Detail extends React.Component {
           />
           <AdviceTile
             title={adviceTileName}
-            comment={this.state.video && this.state.video.data.advice}
+            comment={advice}
           />
           <UrlTile
             show={!this.state.video.id}
@@ -91,11 +96,7 @@ class Detail extends React.Component {
         <CloseButton
           style={styles.button}
           buttonEnabled={this.state.buttonEnabled}
-          onPress={() => {
-            this.props.navigation.navigate({
-              routeName: 'List',
-            });
-          }}
+          onPress={this.onPressClose}
         />
       </View>
     );

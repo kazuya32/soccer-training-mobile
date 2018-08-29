@@ -4,6 +4,7 @@ import firebase from 'firebase';
 
 import designLanguage from '../../designLanguage.json';
 import ContentTile from './ContentTile.js';
+import AdTile from '../elements/AdTile.js';
 
 class Template extends React.Component {
   state = {}
@@ -63,10 +64,17 @@ class Template extends React.Component {
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => (
-    <ContentTile
-      video={item}
-      withAd={index !== 0 && index % 6 === 0}
-    />
+    <View style={styles.tile}>
+      <ContentTile
+        video={item}
+        index={index}
+      />
+      <View style={index !== 0 && index % 6 === 0 && styles.ad}>
+        <AdTile
+          show={index !== 0 && index % 6 === 0}
+        />
+      </View>
+    </View>
   )
 
   render() {
@@ -97,6 +105,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: designLanguage.color50,
+  },
+  tile: {
+    marginBottom: 8,
+  },
+  ad: {
+    marginTop: 8,
   },
   indicator: {
     flex: 1,

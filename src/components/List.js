@@ -2,7 +2,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Constants } from 'expo';
 import firebase from 'firebase';
+import * as Animatable from 'react-native-animatable';
 
+import defaultMovie from '../../defaultMovie.json';
 import MovieList from '../components/MovieList.js';
 import TipsButton from '../elements/TipsButton.js';
 
@@ -10,7 +12,7 @@ import TipsButton from '../elements/TipsButton.js';
 class List extends React.Component {
   state = {
     buttonEnabled: true,
-    currentVideo: false,
+    hasContent: false,
   }
 
   componentDidMount() {
@@ -23,7 +25,8 @@ class List extends React.Component {
     sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
         const { currentVideo, buttonEnabled } = doc.data();
-        this.setState({ currentVideo, buttonEnabled });
+        const hasContent = currentVideo && currentVideo.id !== defaultMovie.id;
+        this.setState({ hasContent, buttonEnabled });
       }
     });
   }
@@ -35,17 +38,20 @@ class List extends React.Component {
   }
 
   render() {
+    const animation = this.state.hasContent ? 'bounce' : null;
     return (
       <View style={styles.container}>
         <MovieList />
-        <TipsButton
-          onPress={this.onButtonPress}
-          style={[
-            styles.tipsButton,
-          ]}
-          buttonEnabled={this.state.buttonEnabled}
-          hasContent={this.state.currentVideo}
-        />
+        <Animatable.View animation={animation} iterationCount={1} direction="alternate" duration={2000}>
+          <TipsButton
+            onPress={this.onButtonPress}
+            style={[
+              styles.tipsButton,
+            ]}
+            buttonEnabled={this.state.buttonEnabled}
+            hasContent={this.state.hasContent}
+          />
+        </Animatable.View>
       </View>
     );
   }

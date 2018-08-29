@@ -4,18 +4,20 @@ import {
   View,
   Text,
   TouchableHighlight,
+  TouchableWithoutFeedback,
   Image,
   Alert,
+  Platform,
 } from 'react-native';
 import {
   Constants,
   FileSystem,
 } from 'expo';
 import firebase from 'firebase';
+import * as Animatable from 'react-native-animatable';
 
 import designLanguage from '../../designLanguage.json';
-import digestMovie from '../../digestMovie.json';
-import AdTile from '../elements/AdTile.js';
+import defaultMovie from '../../defaultMovie.json';
 import DownloadButton from '../elements/DownloadButton.js';
 
 class ContentTile extends React.Component {
@@ -42,7 +44,7 @@ class ContentTile extends React.Component {
         if (currentVideoId) {
           this.setState({ active: (currentVideoId === id) });
         } else {
-          this.setState({ active: (digestMovie.id === id) });
+          this.setState({ active: (defaultMovie.id === id) });
         }
       }
     });
@@ -178,6 +180,7 @@ class ContentTile extends React.Component {
 
   // eslint-disable-next-line
   onPressTile = () => {
+    // this.view.bounce(800);
     if (this.state.hasLocalDocument) {
       this.playLocalVideo();
     } else if (!this.state.active) {
@@ -186,10 +189,12 @@ class ContentTile extends React.Component {
     }
   }
 
+  // handleViewtRef = ref => this.view = ref;
+
   render() {
     const {
       video,
-      withAd,
+      index,
     } = this.props;
 
     const thumbnailUrl = video.data.youtubeData.snippet.thumbnails.high.url;
@@ -198,49 +203,70 @@ class ContentTile extends React.Component {
     const { player } = video.data.tags;
     const tags = video.data.tags.desc;
 
-    const isDeigest = video.id === digestMovie.id;
+    // const animation = index % 2 === 0 ? 'fadeInRightBig' : 'fadeInLeftBig';
+    const animationAndroid = index % 2 === 0 ? 'zoomInLeft' : 'zoomInRight';
+    const animationIOS = index % 2 === 0 ? 'flipInX' : 'flipInX';
+    const delay = (index + 1) * 300;
+    const isDefault = video.id === defaultMovie.id;
+
+    const animation = Platform.OS === 'android' ? animationAndroid : animationIOS;
 
     return (
-      <TouchableHighlight style={[styles.container, this.state.active && { backgroundColor: designLanguage.color700 }]} onPress={this.onPressTile} underlayColor="transparent">
-        <View>
-          <View
-            style={[styles.tile, withAd && { marginBottom: 4 }]}
-          >
-            <Image
-              style={styles.thumbnail}
-              source={{ uri: thumbnailUrl }}
-              resizeMode="cover"
-            />
-            <View style={[styles.caption]}>
-              <Text style={[styles.skill, this.state.active && styles.skillActive]}>
-                {tags.join('の')}
-              </Text>
-              <Text style={[styles.player, this.state.active && styles.playerActive]}>
-                {player.join(', ').replace('選手', '')}
-              </Text>
+      <Animatable.View
+        // ref={this.handleViewtRef}
+        animation={animation}
+        // animation="flipInX"
+        iterationCount={1}
+        direction="alternate"
+        duration={1000}
+        delay={delay}
+        easing="ease"
+      >
+        <TouchableHighlight
+          style={[
+            styles.container,
+            // eslint-disable-next-line
+            this.state.active && { backgroundColor: designLanguage.color700 },
+          ]}
+          onPress={this.onPressTile}
+          underlayColor="transparent"
+        >
+          <View>
+            <View
+              style={[styles.tile]}
+            >
+              <Image
+                style={styles.thumbnail}
+                source={{ uri: thumbnailUrl }}
+                resizeMode="cover"
+              />
+              <View style={[styles.caption]}>
+                <Text style={[styles.skill, this.state.active && styles.skillActive]}>
+                  {tags.join('の')}
+                </Text>
+                <Text style={[styles.player, this.state.active && styles.playerActive]}>
+                  {player.join(', ').replace('選手', '')}
+                </Text>
+              </View>
+              <DownloadButton
+                show={!isDefault}
+                style={styles.downloadButton}
+                onPress={this.onPressDownload}
+                hasLocalDocument={this.state.hasLocalDocument}
+                downloadProgress={this.state.downloadProgress}
+                isLoading={this.state.isLoading}
+                active={this.state.active}
+              />
             </View>
-            <DownloadButton
-              show={!isDeigest}
-              style={styles.downloadButton}
-              onPress={this.onPressDownload}
-              hasLocalDocument={this.state.hasLocalDocument}
-              downloadProgress={this.state.downloadProgress}
-              isLoading={this.state.isLoading}
-              active={this.state.active}
-            />
           </View>
-          <AdTile
-            show={withAd}
-          />
-        </View>
-      </TouchableHighlight>
+        </TouchableHighlight>
+      </Animatable.View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 8,
     paddingLeft: 4,
     // paddingRight: 4,
   },

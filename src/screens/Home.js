@@ -15,7 +15,7 @@ import {
 import { Circle } from 'react-native-progress';
 
 import designLanguage from '../../designLanguage.json';
-import digestMovie from '../../digestMovie.json';
+import defaultMovie from '../../defaultMovie.json';
 import ENV from '../../env.json';
 import UnderPane from '../components/UnderPane.js';
 import VideoPane from '../components/VideoPane.js';
@@ -29,8 +29,8 @@ const BANNER_ID = ENV.ADMOB_BANNER_ID;
 class Home extends React.Component {
   state = {
     initialized: false,
-    introRemoteUri: digestMovie.downloadURL,
-    // introRemoteUri: digestMovie.testURL,
+    introRemoteUri: defaultMovie.downloadURL,
+    // introRemoteUri: defaultMovie.testURL,
   }
 
   componentWillMount() {
@@ -47,7 +47,7 @@ class Home extends React.Component {
   }
 
   fetchDefaultVideo = () => {
-    const digestYoutubeId = digestMovie.youtubeId;
+    const digestYoutubeId = defaultMovie.youtubeId;
     const defaultUri = `${FileSystem.documentDirectory}${digestYoutubeId}.mp4`;
     // const defaultUri = FileSystem.cacheDirectory + 'test7.mp4';
     FileSystem.getInfoAsync(defaultUri)

@@ -7,7 +7,11 @@ import ContentTile from './ContentTile.js';
 import AdTile from '../elements/AdTile.js';
 
 class Template extends React.Component {
-  state = {}
+  state = {
+    showingVideos: null,
+    loading: false,
+    reloadNumber: 6,
+  }
 
   componentWillMount() {
     this.fetchVideos(this.props.category);
@@ -41,7 +45,26 @@ class Template extends React.Component {
           videos.unshift(digestVideo);
         }
         this.setState({ videos });
+        this.addVideos();
       });
+  }
+
+  addVideos = () => {
+    const { videos } = this.state;
+    if (!this.state.loading && videos.length) {
+      this.setState({ loading: true });
+
+      let { showingVideos } = this.state;
+      if (!showingVideos) {
+        showingVideos = videos.slice(0, this.state.reloadNumber);
+        videos.splice(0, this.state.reloadNumber);
+      } else {
+        const tmp = videos.slice(0, this.state.reloadNumber);
+        videos.splice(0, this.state.reloadNumber);
+        Array.prototype.push.apply(showingVideos, tmp);
+      }
+      this.setState({ showingVideos, videos, loading: false });
+    }
   }
 
   shuffle = (array) => {
@@ -67,34 +90,41 @@ class Template extends React.Component {
     <View style={styles.tile}>
       <ContentTile
         video={item}
-        index={index}
+        index={index % this.state.reloadNumber}
       />
-      <View style={index !== 0 && index % 6 === 0 && styles.ad}>
+      <View style={(index + 1) % this.state.reloadNumber === 0 && styles.ad}>
         <AdTile
-          show={index !== 0 && index % 6 === 0}
+          show={(index + 1) % this.state.reloadNumber === 0}
         />
       </View>
     </View>
   )
 
   render() {
-    if (!this.state.videos) {
+    if (!this.state.showingVideos) {
       return (
         <View style={[styles.indicator]}>
-          <ActivityIndicator animating={!this.state.loaded} size="large" color={designLanguage.colorPrimary} />
+          <ActivityIndicator animating={!this.state.showingVideos} size="large" color={designLanguage.colorPrimary} />
         </View>
       );
     }
 
     return (
       <View style={styles.container}>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={this.state.videos}
-            renderItem={this.renderItem}
-            keyExtractor={this.keyExtractor}
-            // extraData={this.state}
-          />
+        <FlatList
+          data={this.state.showingVideos}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
+          // extraData={this.state}
+          onEndReachedThreshold={0.1}
+          onEndReached={this.addVideos}
+        />
+        <View style={[
+            styles.activityIndicator,
+            !this.state.loading && { display: 'none' },
+          ]}
+        >
+          <ActivityIndicator size="small" color={designLanguage.colorPrimary} animating={this.state.loading} />
         </View>
       </View>
     );
@@ -105,12 +135,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: designLanguage.color50,
-  },
-  tile: {
-    marginBottom: 8,
-  },
-  ad: {
-    marginTop: 8,
+    width: '100%',
+    justifyContent: 'flex-start',
   },
   indicator: {
     flex: 1,
@@ -119,9 +145,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  listContainer: {
-    width: '100%',
-    justifyContent: 'flex-start',
+  tile: {
+    marginBottom: 8,
+  },
+  ad: {
+    marginTop: 8,
+  },
+  activityIndicator: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

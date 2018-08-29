@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableHighlight,
-  TouchableWithoutFeedback,
   Image,
   Alert,
   Platform,

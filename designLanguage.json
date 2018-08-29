@@ -9,5 +9,6 @@
   "color300": "#63d1fe",
   "color200": "#8ddeff",
   "color100": "#baeaff",
-  "color50": "#e4f7ff"
+  "color50": "#fff",
+  "deprecatedColor50": "#e4f7ff"
 }

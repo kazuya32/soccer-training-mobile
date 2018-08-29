@@ -14,6 +14,7 @@ import {
 import firebase from 'firebase';
 
 import designLanguage from '../../designLanguage.json';
+import digestMovie from '../../digestMovie.json';
 import AdTile from '../elements/AdTile.js';
 import DownloadButton from '../elements/DownloadButton.js';
 
@@ -32,13 +33,17 @@ class ContentTile extends React.Component {
   // eslint-disable-next-line
   fetchSession = () => {
     const { video } = this.props;
-    const { title } = video.data.youtubeData.snippet;
+    const { id } = video;
     const db = firebase.firestore();
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
         const currentVideoId = doc.data().currentVideo && doc.data().currentVideo.id;
-        this.setState({ active: (currentVideoId === title) });
+        if (currentVideoId) {
+          this.setState({ active: (currentVideoId === id) });
+        } else {
+          this.setState({ active: (digestMovie.id === id) });
+        }
       }
     });
   }
@@ -129,14 +134,41 @@ class ContentTile extends React.Component {
       });
   }
 
+  deleteLocalVideo = async () => {
+    FileSystem.deleteAsync(this.state.localUri)
+      .then(() => {
+        this.setState({ hasLocalDocument: false });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+      });
+  }
+
+  confirmDelete = async () => {
+    Alert.alert(
+      '選択した動画をアプリから削除してもよろしいですか？',
+      undefined,
+      [
+        // eslint-disable-next-line
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        {
+          text: 'OK',
+          onPress: this.deleteLocalVideo,
+        },
+      ],
+      { cancelable: false },
+    );
+  }
+
   playLocalVideo = async () => {
     this.updateSession(this.state.localUri, this.props.video);
   }
 
   // eslint-disable-next-line
-  onPressLocal = () => {
+  onPressDownload = () => {
     if (this.state.hasLocalDocument) {
-      this.playLocalVideo();
+      this.confirmDelete();
     } else if (!this.state.isLoading) {
       this.setState({ isLoading: true });
       const toDownload = true;
@@ -145,7 +177,7 @@ class ContentTile extends React.Component {
   }
 
   // eslint-disable-next-line
-  onPressContainer = () => {
+  onPressTile = () => {
     if (this.state.hasLocalDocument) {
       this.playLocalVideo();
     } else if (!this.state.active) {
@@ -166,8 +198,10 @@ class ContentTile extends React.Component {
     const { player } = video.data.tags;
     const tags = video.data.tags.desc;
 
+    const isDeigest = video.id === digestMovie.id;
+
     return (
-      <TouchableHighlight style={[styles.container, this.state.active && { backgroundColor: designLanguage.color700 }]} onPress={this.onPressContainer} underlayColor="transparent">
+      <TouchableHighlight style={[styles.container, this.state.active && { backgroundColor: designLanguage.color700 }]} onPress={this.onPressTile} underlayColor="transparent">
         <View>
           <View
             style={[styles.tile, withAd && { marginBottom: 4 }]}
@@ -177,7 +211,7 @@ class ContentTile extends React.Component {
               source={{ uri: thumbnailUrl }}
               resizeMode="cover"
             />
-            <View style={styles.caption}>
+            <View style={[styles.caption]}>
               <Text style={[styles.skill, this.state.active && styles.skillActive]}>
                 {tags.join('の')}
               </Text>
@@ -186,8 +220,9 @@ class ContentTile extends React.Component {
               </Text>
             </View>
             <DownloadButton
+              show={!isDeigest}
               style={styles.downloadButton}
-              onPress={this.onPressLocal}
+              onPress={this.onPressDownload}
               hasLocalDocument={this.state.hasLocalDocument}
               downloadProgress={this.state.downloadProgress}
               isLoading={this.state.isLoading}

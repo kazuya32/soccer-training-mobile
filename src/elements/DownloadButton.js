@@ -6,29 +6,23 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import designLanguage from '../../designLanguage.json';
 
 class DownloadButton extends React.Component {
-  state = {
-    isDownloading: false,
-  }
-
-  onPress = () => {
-    if (!this.state.isDownloading) {
-      this.setState({ isDownloading: true });
-      this.props.onPress();
-    }
-  }
   render() {
     const {
-      onPress,
       style,
       hasLocalDocument,
       isLoading,
       downloadProgress,
       active,
+      show,
     } = this.props;
 
-    const iconName = hasLocalDocument ? 'play-circle-outline' : 'download';
-    const iconSize = hasLocalDocument ? 28 : 24;
-    const fontColor = active ? designLanguage.color50 : designLanguage.colorPrimary;
+    const onPress = show ? this.props.onPress : null;
+
+    const iconName = hasLocalDocument ? 'checkbox-marked-circle-outline' : 'download';
+    const iconSize = 28;
+    const generalColor = active ? designLanguage.color50 : designLanguage.colorPrimary;
+    const digestColor = 'transparent';
+    const fontColor = show ? generalColor : digestColor;
 
     if (isLoading) {
       return (
@@ -38,7 +32,7 @@ class DownloadButton extends React.Component {
           <Pie
             progress={downloadProgress}
             size={24}
-            borderWidth={0}
+            borderWidth={2}
             color={fontColor}
             style={{ alignSelf: 'center' }}
             endAngle={1}

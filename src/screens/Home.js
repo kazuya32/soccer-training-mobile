@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
 import {
   AdMobBanner,
@@ -14,7 +15,7 @@ import {
 import { Circle } from 'react-native-progress';
 
 import designLanguage from '../../designLanguage.json';
-import movieList from '../../movieList.json';
+import digestMovie from '../../digestMovie.json';
 import ENV from '../../env.json';
 import UnderPane from '../components/UnderPane.js';
 import VideoPane from '../components/VideoPane.js';
@@ -28,8 +29,8 @@ const BANNER_ID = ENV.ADMOB_BANNER_ID;
 class Home extends React.Component {
   state = {
     initialized: false,
-    introRemoteUri: movieList.introduction,
-    // introRemoteUri: movieList.test,
+    introRemoteUri: digestMovie.downloadURL,
+    // introRemoteUri: digestMovie.testURL,
   }
 
   componentWillMount() {
@@ -46,9 +47,9 @@ class Home extends React.Component {
   }
 
   fetchDefaultVideo = () => {
-    const defaultFile = 'introduction.mp4';
-    // const defaultFile = 'test.mp4';
-    const defaultUri = `${FileSystem.documentDirectory}${defaultFile}`;
+    const digestYoutubeId = digestMovie.youtubeId;
+    const defaultUri = `${FileSystem.documentDirectory}${digestYoutubeId}.mp4`;
+    // const defaultUri = FileSystem.cacheDirectory + 'test7.mp4';
     FileSystem.getInfoAsync(defaultUri)
       .then(({ exists }) => {
         if (exists) {
@@ -120,8 +121,12 @@ class Home extends React.Component {
     ) : null;
 
     if (!this.state.initialized) {
+      const loadingText = 'Loading(80.3MB)';
       return (
         <View style={[styles.container, { justifyContent: 'center' }]} >
+          <Text style={styles.loading}>
+            {this.state.progress && loadingText}
+          </Text>
           {progressBar}
         </View>
       );
@@ -156,6 +161,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: designLanguage.color50,
+  },
+  loading: {
+    padding: 32,
+    color: designLanguage.colorPrimary,
+    textAlign: 'center',
+    fontSize: 24,
   },
   videoPlayer: {
     zIndex: 100,

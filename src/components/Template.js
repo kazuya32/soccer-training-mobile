@@ -32,7 +32,13 @@ class Template extends React.Component {
             data: doc.data(),
           });
         });
-        videos = this.shuffle(videos);
+
+        if (category === 'recent') {
+          const digestVideo = videos[0];
+          videos.shift();
+          videos = this.shuffle(videos);
+          videos.unshift(digestVideo);
+        }
         this.setState({ videos });
       });
   }
@@ -100,7 +106,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   listContainer: {
-    // marginTop: 10,
     width: '100%',
     justifyContent: 'flex-start',
   },

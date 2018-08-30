@@ -38,15 +38,10 @@ class MovieList extends React.Component {
           tabLabel="トラップ"
           category="trap"
         />
-        <Template
-          tabLabel="フリーキック"
-          category="freeKick"
-        />
       </ScrollableTabView>
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   header: {

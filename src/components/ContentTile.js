@@ -85,7 +85,10 @@ class ContentTile extends React.Component {
 
   resume = async () => {
     try {
-      const downloadJson = await AsyncStorage.getItem('pausedDownload');
+      const { video } = this.props;
+      const youtubeId = video.data.youtubeData.id.videoId;
+
+      const downloadJson = await AsyncStorage.getItem(`pausedDownload${youtubeId}`);
       if (downloadJson !== null) {
         const downloadFromStore = JSON.parse(downloadJson);
         this.download = new FileSystem.DownloadResumable(
@@ -110,10 +113,13 @@ class ContentTile extends React.Component {
 
   pause = async () => {
     try {
+      const { video } = this.props;
+      const youtubeId = video.data.youtubeData.id.videoId;
+
       const downloadSnapshot = await this.download.pauseAsync();
       // eslint-disable-next-line
       console.log('Paused download operation, saving for future retrieval');
-      await AsyncStorage.setItem('pausedDownload', JSON.stringify(downloadSnapshot));
+      await AsyncStorage.setItem(`pausedDownload${youtubeId}`, JSON.stringify(downloadSnapshot));
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);

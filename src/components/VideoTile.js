@@ -21,6 +21,7 @@ class VideoTile extends React.Component {
       <TouchableHighlight
         onPress={onPress}
         underlayColor="transparent"
+        style={[styles.container]}
       >
         <View
           style={[styles.tile]}
@@ -45,14 +46,17 @@ class VideoTile extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   tile: {
     flexDirection: 'row',
   },
   thumbnail: {
-    flex: 2,
+    flex: 1,
   },
   caption: {
-    flex: 4,
+    flex: 2,
     padding: 8,
     justifyContent: 'center',
   },

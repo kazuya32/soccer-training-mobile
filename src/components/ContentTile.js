@@ -2,9 +2,6 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
-  TouchableHighlight,
-  Image,
   Alert,
   Platform,
   AsyncStorage,
@@ -25,7 +22,7 @@ class ContentTile extends React.Component {
   state = {
     hasLocalDocument: false,
     localUri: null,
-    isLoading: false,
+    status: null,
   }
 
   componentDidMount() {
@@ -80,94 +77,89 @@ class ContentTile extends React.Component {
       downloadProgress.totalBytesWritten /
       downloadProgress.totalBytesExpectedToWrite;
     // eslint-disable-next-line
-    console.log(progress);
+    // console.log(progress);
     this.setState({
       downloadProgress: progress,
     });
   };
 
-  resumeWriting = async () => {
-    const downloadSnapshotJson = await AsyncStorage.getItem('pausedDownload');
-    const downloadSnapshot = JSON.parse(downloadSnapshotJson);
-    const downloadResumable = new FileSystem.DownloadResumable(
-      downloadSnapshot.url,
-      downloadSnapshot.fileUri,
-      downloadSnapshot.options,
-      this.setProgress,
-      downloadSnapshot.resumeData,
-    );
-
+  resume = async () => {
     try {
-      const { uri } = await downloadResumable.resumeAsync();
-      console.log('Finished downloading to ', uri);
+      const downloadJson = await AsyncStorage.getItem('pausedDownload');
+      if (downloadJson !== null) {
+        const downloadFromStore = JSON.parse(downloadJson);
+        this.download = new FileSystem.DownloadResumable(
+          downloadFromStore.url,
+          downloadFromStore.fileUri,
+          downloadFromStore.options,
+          this.setProgress,
+          downloadFromStore.resumeData,
+        );
+        await this.download.resumeAsync();
+        if (this.state.downloadProgress === 1) {
+          this.setState({ hasLocalDocument: true, status: null });
+        }
+      } else {
+        return;
+      }
     } catch (e) {
-      console.error(e);
+      // eslint-disable-next-line
+      console.log(e);
     }
-  }
+  };
 
-  pauseWriting = async () => {
+  pause = async () => {
     try {
-      const { downloadResumable } = this.state;
-      await downloadResumable.pauseAsync();
+      const downloadSnapshot = await this.download.pauseAsync();
+      // eslint-disable-next-line
       console.log('Paused download operation, saving for future retrieval');
-      AsyncStorage.setItem(
-        'pausedDownload',
-        JSON.stringify(downloadResumable.savable()),
-      );
+      await AsyncStorage.setItem('pausedDownload', JSON.stringify(downloadSnapshot));
     } catch (e) {
+      // eslint-disable-next-line
       console.error(e);
     }
   }
 
-  writeDocument = async (remoteUri) => {
-    const downloadResumable = FileSystem.createDownloadResumable(
-      remoteUri,
-      this.state.localUri,
-      {},
-      this.setProgress,
-    );
-
-    this.setState({ downloadResumable });
-
+  download = async () => {
     try {
-      const { uri } = await downloadResumable.downloadAsync();
-      // eslint-disable-next-line
-      console.log('Finished downloading to ', uri);
-      this.setState({ hasLocalDocument: true, isLoading: false });
+      const remoteUri = await this.getRemoteUri();
+      if (remoteUri) {
+        this.download = FileSystem.createDownloadResumable(
+          remoteUri,
+          this.state.localUri,
+          {},
+          this.setProgress,
+        );
+
+        await this.download.downloadAsync();
+        // eslint-disable-next-line
+        if (this.state.downloadProgress === 1){
+          this.setState({ hasLocalDocument: true, status: null });
+        }
+      } else {
+        Alert.alert('この動画は現在利用できません。');
+        this.setState({ status: null });
+      }
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);
     }
   }
 
-  getRemoteUri = (toDownload) => {
+  getRemoteUri = () => {
     const { video } = this.props;
 
     const storage = firebase.storage();
     const storageRef = storage.ref();
     const withoutCommentRef = storageRef.child(`video/withoutComment/${video.id}.mp4`);
-    withoutCommentRef.getDownloadURL()
-      .then((videoUrl) => {
-        if (toDownload) {
-          this.writeDocument(videoUrl);
-        } else {
-          this.updateSession(videoUrl, video);
-        }
-      })
+    // const remoteUri = await withoutCommentRef.getDownloadURL();
+    return withoutCommentRef.getDownloadURL()
       .catch(() => {
         const withCommentRef = storageRef.child(`video/withComment/${video.id}.mp4`);
         withCommentRef.getDownloadURL()
-          .then((videoUrl) => {
-            if (toDownload) {
-              this.writeDocument(videoUrl);
-            } else {
-              this.updateSession(videoUrl, video);
-            }
-          })
           .catch((error) => {
             // eslint-disable-next-line
             console.log(error);
-            Alert.alert('この動画は現在ダウンロードできません。');
           });
       });
   }
@@ -203,16 +195,37 @@ class ContentTile extends React.Component {
     this.updateSession(this.state.localUri, this.props.video);
   }
 
+  playRemoteVideo = async () => {
+    try {
+      const remoteUri = await this.getRemoteUri();
+      if (remoteUri) {
+        this.updateSession(remoteUri, this.props.video);
+      } else {
+        Alert.alert('この動画は現在利用できません。');
+      }
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e);
+    }
+  }
+
   // eslint-disable-next-line
   onPressDownload = () => {
     if (this.state.hasLocalDocument) {
       this.confirmDelete();
-    } else if (!this.state.isLoading) {
-      this.setState({ isLoading: true });
-      const toDownload = true;
-      this.getRemoteUri(toDownload);
-    } else {
-      this.pauseWriting();
+    } else if (!this.state.status) {
+      this.setState({ status: 'loading' });
+      this.download();
+    } else if (this.state.status === 'loading') {
+      this.setState({ status: 'paused' });
+      // eslint-disable-next-line
+      console.log('pause');
+      this.pause();
+    } else if (this.state.status === 'paused') {
+      this.setState({ status: 'loading' });
+      // eslint-disable-next-line
+      console.log('resume');
+      this.resume();
     }
   }
 
@@ -222,8 +235,7 @@ class ContentTile extends React.Component {
     if (this.state.hasLocalDocument) {
       this.playLocalVideo();
     } else if (!this.state.active) {
-      const toDownload = false;
-      this.getRemoteUri(toDownload);
+      this.playRemoteVideo();
     }
   }
 
@@ -257,14 +269,12 @@ class ContentTile extends React.Component {
         <View
           style={[
             styles.container,
-            // eslint-disable-next-line
             this.state.active && { backgroundColor: designLanguage.color700 },
           ]}
         >
           <VideoTile
             video={video}
             onPress={this.onPressTile}
-            isLoading={this.state.isLoading}
             active={this.state.active}
             style={styles.videoTile}
           />
@@ -274,7 +284,7 @@ class ContentTile extends React.Component {
             onPress={this.onPressDownload}
             hasLocalDocument={this.state.hasLocalDocument}
             downloadProgress={this.state.downloadProgress}
-            isLoading={this.state.isLoading}
+            status={this.state.status}
             active={this.state.active}
           />
         </View>
@@ -285,16 +295,15 @@ class ContentTile extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingLeft: 4,
     flexDirection: 'row',
-    // paddingRight: 4,
   },
   videoTile: {
-    // flex: 6,
-    width: '80%',
+    flex: 1,
   },
   downloadButton: {
-    flex: 1,
+    paddingRight: 12,
   },
 });
 

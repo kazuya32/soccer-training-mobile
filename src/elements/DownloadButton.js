@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableHighlight, View } from 'react-native';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 import { Circle } from 'react-native-progress';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,35 +8,34 @@ import designLanguage from '../../designLanguage.json';
 class DownloadButton extends React.Component {
   formatText = () => {
     const {
-      style,
-      hasLocalDocument,
-      isLoading,
-      downloadProgress,
       active,
       show,
+      status,
     } = this.props;
 
+    const iconName = status === 'loading' ? 'pause' : 'play';
     const generalColor = active ? designLanguage.color50 : designLanguage.colorPrimary;
     const digestColor = 'transparent';
     const fontColor = show ? generalColor : digestColor;
 
+
     return (
       <Icon
-        name="pause"
-        size={20}
+        name={iconName}
+        size={24}
         style={[
           styles.button,
           { color: fontColor },
         ]}
       />
-    )
+    );
   }
 
   render() {
     const {
       style,
       hasLocalDocument,
-      isLoading,
+      status,
       downloadProgress,
       active,
       show,
@@ -44,48 +43,35 @@ class DownloadButton extends React.Component {
 
     const onPress = show ? this.props.onPress : null;
 
-    const iconName = hasLocalDocument ? 'checkbox-marked-circle-outline' : 'download';
-    const iconSize = 36;
     const generalColor = active ? designLanguage.color50 : designLanguage.colorPrimary;
     const digestColor = 'transparent';
     const fontColor = show ? generalColor : digestColor;
+    const iconSize = 36;
 
-    if (isLoading) {
+    if (status === 'loading') {
       return (
-        <View
+        <TouchableHighlight
+          onPress={onPress}
           style={[styles.container, style]}
+          underlayColor="transparent"
         >
           <Circle
             progress={downloadProgress}
             formatText={this.formatText}
             showsText
             thickness={3}
-            size={32}
+            size={iconSize}
             borderWidth={0}
             color={fontColor}
             style={{ alignSelf: 'center' }}
             endAngle={1}
           />
-        </View>
+        </TouchableHighlight>
       );
     }
 
-    // if (isLoading) {
-    //   return (
-    //     <View
-    //       style={[styles.container, style]}
-    //     >
-    //       <Pie
-    //         progress={downloadProgress}
-    //         size={24}
-    //         borderWidth={2}
-    //         color={fontColor}
-    //         style={{ alignSelf: 'center' }}
-    //         endAngle={1}
-    //       />
-    //     </View>
-    //   );
-    // }
+    const downloadIcon = downloadProgress ? 'replay' : 'download';
+    const iconName = hasLocalDocument ? 'checkbox-marked-circle-outline' : downloadIcon;
 
     return (
       <TouchableHighlight
@@ -111,8 +97,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
   },
+  pauseIcon: {
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
   button: {
     textAlign: 'center',
+    textAlignVertical: 'center',
   },
 });
 

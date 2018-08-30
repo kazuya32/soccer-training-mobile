@@ -20,6 +20,12 @@ import ENV from '../../env.json';
 import UnderPane from '../components/UnderPane.js';
 import VideoPane from '../components/VideoPane.js';
 
+const desc = 'このアプリはプロのサッカー選手を目指すための技術を紹介しています。' +
+  'サッカーの実践スキルを習得したい人や練習を指導する方のお役に立てると思います。\n\n' +
+  '実践的なスキルを細かいポイントに分解することで' +
+  'アクションを起こしやすくしています。\n\n' +
+  'まずは好きなサッカー選手やスキルカテゴリの動画を選んで再生してみてください！';
+
 // const ADUNITID = ENV.ADMOB_ADUNITID;
 const BANNER_ID = ENV.ADMOB_BANNER_ID;
 // const INTERSTITIAL_ID = ENV.ADMOB_INTERSTITIAL_ID;
@@ -49,7 +55,7 @@ class Home extends React.Component {
   fetchDefaultVideo = () => {
     const digestYoutubeId = defaultMovie.youtubeId;
     const defaultUri = `${FileSystem.documentDirectory}${digestYoutubeId}.mp4`;
-    // const defaultUri = FileSystem.cacheDirectory + 'test7.mp4';
+    // const defaultUri = FileSystem.cacheDirectory + 'test1.mp4';
     FileSystem.getInfoAsync(defaultUri)
       .then(({ exists }) => {
         if (exists) {
@@ -121,6 +127,7 @@ class Home extends React.Component {
     ) : null;
 
     if (!this.state.initialized) {
+      // if (true) {
       const loadingText = 'Loading(80.3MB)';
       return (
         <View style={[styles.container, { justifyContent: 'center' }]} >
@@ -128,6 +135,9 @@ class Home extends React.Component {
             {this.state.progress && loadingText}
           </Text>
           {progressBar}
+          <Text style={styles.desc}>
+            {this.state.progress && desc}
+          </Text>
         </View>
       );
     }
@@ -170,6 +180,12 @@ const styles = StyleSheet.create({
   },
   videoPlayer: {
     zIndex: 100,
+  },
+  desc: {
+    paddingTop: 32,
+    padding: 16,
+    color: designLanguage.colorPrimary,
+    fontSize: 16,
   },
 });
 

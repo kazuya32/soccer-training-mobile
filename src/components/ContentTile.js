@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   Platform,
+  AsyncStorage,
 } from 'react-native';
 import {
   Constants,
@@ -18,6 +19,7 @@ import * as Animatable from 'react-native-animatable';
 import designLanguage from '../../designLanguage.json';
 import defaultMovie from '../../defaultMovie.json';
 import DownloadButton from '../elements/DownloadButton.js';
+import VideoTile from './VideoTile.js';
 
 class ContentTile extends React.Component {
   state = {
@@ -84,6 +86,39 @@ class ContentTile extends React.Component {
     });
   };
 
+  resumeWriting = async () => {
+    const downloadSnapshotJson = await AsyncStorage.getItem('pausedDownload');
+    const downloadSnapshot = JSON.parse(downloadSnapshotJson);
+    const downloadResumable = new FileSystem.DownloadResumable(
+      downloadSnapshot.url,
+      downloadSnapshot.fileUri,
+      downloadSnapshot.options,
+      this.setProgress,
+      downloadSnapshot.resumeData,
+    );
+
+    try {
+      const { uri } = await downloadResumable.resumeAsync();
+      console.log('Finished downloading to ', uri);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  pauseWriting = async () => {
+    try {
+      const { downloadResumable } = this.state;
+      await downloadResumable.pauseAsync();
+      console.log('Paused download operation, saving for future retrieval');
+      AsyncStorage.setItem(
+        'pausedDownload',
+        JSON.stringify(downloadResumable.savable()),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   writeDocument = async (remoteUri) => {
     const downloadResumable = FileSystem.createDownloadResumable(
       remoteUri,
@@ -91,6 +126,8 @@ class ContentTile extends React.Component {
       {},
       this.setProgress,
     );
+
+    this.setState({ downloadResumable });
 
     try {
       const { uri } = await downloadResumable.downloadAsync();
@@ -174,6 +211,8 @@ class ContentTile extends React.Component {
       this.setState({ isLoading: true });
       const toDownload = true;
       this.getRemoteUri(toDownload);
+    } else {
+      this.pauseWriting();
     }
   }
 
@@ -196,12 +235,6 @@ class ContentTile extends React.Component {
       index,
     } = this.props;
 
-    const thumbnailUrl = video.data.youtubeData.snippet.thumbnails.high.url;
-    // const { title } = video.data.youtubeData.snippet;
-    // const desc = video.data.youtubeData.snippet.description;
-    const { player } = video.data.tags;
-    const tags = video.data.tags.desc;
-
     // const animation = index % 2 === 0 ? 'fadeInRightBig' : 'fadeInLeftBig';
     const animationAndroid = index % 2 === 0 ? 'zoomInLeft' : 'zoomInRight';
     const animationIOS = index % 2 === 0 ? 'flipInX' : 'flipInX';
@@ -221,44 +254,30 @@ class ContentTile extends React.Component {
         delay={delay}
         easing="ease"
       >
-        <TouchableHighlight
+        <View
           style={[
             styles.container,
             // eslint-disable-next-line
             this.state.active && { backgroundColor: designLanguage.color700 },
           ]}
-          onPress={this.onPressTile}
-          underlayColor="transparent"
         >
-          <View>
-            <View
-              style={[styles.tile]}
-            >
-              <Image
-                style={styles.thumbnail}
-                source={{ uri: thumbnailUrl }}
-                resizeMode="cover"
-              />
-              <View style={[styles.caption]}>
-                <Text style={[styles.skill, this.state.active && styles.skillActive]}>
-                  {tags.join('の')}
-                </Text>
-                <Text style={[styles.player, this.state.active && styles.playerActive]}>
-                  {player.join(', ').replace('選手', '')}
-                </Text>
-              </View>
-              <DownloadButton
-                show={!isDefault}
-                style={styles.downloadButton}
-                onPress={this.onPressDownload}
-                hasLocalDocument={this.state.hasLocalDocument}
-                downloadProgress={this.state.downloadProgress}
-                isLoading={this.state.isLoading}
-                active={this.state.active}
-              />
-            </View>
-          </View>
-        </TouchableHighlight>
+          <VideoTile
+            video={video}
+            onPress={this.onPressTile}
+            isLoading={this.state.isLoading}
+            active={this.state.active}
+            style={styles.videoTile}
+          />
+          <DownloadButton
+            show={!isDefault}
+            style={styles.downloadButton}
+            onPress={this.onPressDownload}
+            hasLocalDocument={this.state.hasLocalDocument}
+            downloadProgress={this.state.downloadProgress}
+            isLoading={this.state.isLoading}
+            active={this.state.active}
+          />
+        </View>
       </Animatable.View>
     );
   }
@@ -267,37 +286,15 @@ class ContentTile extends React.Component {
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 4,
+    flexDirection: 'row',
     // paddingRight: 4,
   },
-  tile: {
-    flexDirection: 'row',
-  },
-  thumbnail: {
-    flex: 2,
-  },
-  caption: {
-    flex: 4,
-    padding: 8,
-    justifyContent: 'center',
-  },
-  player: {
-    color: designLanguage.color800,
-  },
-  playerActive: {
-    color: designLanguage.color100,
-  },
-  skill: {
-    color: designLanguage.color900,
-    fontWeight: '500',
-    fontSize: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
-  },
-  skillActive: {
-    color: designLanguage.color50,
+  videoTile: {
+    // flex: 6,
+    width: '80%',
   },
   downloadButton: {
-    flex:1,
+    flex: 1,
   },
 });
 

@@ -22,7 +22,7 @@ then, in new terminal tab
 
 <https://oblador.github.io/react-native-vector-icons/>
 
-## Material Design
+## Material Design Color
 
 <https://material.io/tools/theme-editor/>
 

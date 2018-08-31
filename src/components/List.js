@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Constants } from 'expo';
 import firebase from 'firebase';
-import * as Animatable from 'react-native-animatable';
 
 import defaultMovie from '../../defaultMovie.json';
 import MovieList from '../components/MovieList.js';
@@ -38,20 +37,17 @@ class List extends React.Component {
   }
 
   render() {
-    const animation = this.state.hasContent ? 'bounce' : null;
     return (
       <View style={styles.container}>
         <MovieList />
-        <Animatable.View animation={animation} iterationCount={1} direction="alternate" duration={2000}>
-          <TipsButton
-            onPress={this.onButtonPress}
-            style={[
-              styles.tipsButton,
-            ]}
-            buttonEnabled={this.state.buttonEnabled}
-            hasContent={this.state.hasContent}
-          />
-        </Animatable.View>
+        <TipsButton
+          onPress={this.onButtonPress}
+          style={[
+            styles.tipsButton,
+          ]}
+          buttonEnabled={this.state.buttonEnabled}
+          hasContent={this.state.hasContent}
+        />
       </View>
     );
   }

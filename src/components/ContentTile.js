@@ -253,47 +253,58 @@ class ContentTile extends React.Component {
       index,
     } = this.props;
 
-    // const animation = index % 2 === 0 ? 'fadeInRightBig' : 'fadeInLeftBig';
-    const animationAndroid = index % 2 === 0 ? 'zoomInLeft' : 'zoomInRight';
-    const animationIOS = index % 2 === 0 ? 'flipInX' : 'flipInX';
-    const delay = (index + 1) * 300;
     const isDefault = video.id === defaultMovie.id;
 
-    const animation = Platform.OS === 'android' ? animationAndroid : animationIOS;
+    const isAndroid = Platform.OS === 'android';
+
+    const animationAndroid = 'fadeIn';
+    const animationIOS = 'fadeIn';
+    const animation = isAndroid ? animationAndroid : animationIOS;
+
+    const delayTime = isAndroid ? 400 : 300;
+    const delay = (index + 1) * delayTime;
+    const ease = isAndroid ? 'ease' : 'ease';
+
+    const body = (
+      <View
+        style={[
+          styles.container,
+          this.state.active && { backgroundColor: designLanguage.color700 },
+        ]}
+      >
+        <VideoTile
+          video={video}
+          onPress={this.onPressTile}
+          active={this.state.active}
+          style={styles.videoTile}
+        />
+        <DownloadButton
+          show={!isDefault}
+          style={styles.downloadButton}
+          onPress={this.onPressDownload}
+          hasLocalDocument={this.state.hasLocalDocument}
+          downloadProgress={this.state.downloadProgress}
+          status={this.state.status}
+          active={this.state.active}
+        />
+      </View>
+    );
+
+    if (isAndroid) {
+      return body;
+    }
 
     return (
       <Animatable.View
         // ref={this.handleViewtRef}
         animation={animation}
-        // animation="flipInX"
         iterationCount={1}
         direction="alternate"
         duration={1000}
         delay={delay}
-        easing="ease"
+        easing={ease}
       >
-        <View
-          style={[
-            styles.container,
-            this.state.active && { backgroundColor: designLanguage.color700 },
-          ]}
-        >
-          <VideoTile
-            video={video}
-            onPress={this.onPressTile}
-            active={this.state.active}
-            style={styles.videoTile}
-          />
-          <DownloadButton
-            show={!isDefault}
-            style={styles.downloadButton}
-            onPress={this.onPressDownload}
-            hasLocalDocument={this.state.hasLocalDocument}
-            downloadProgress={this.state.downloadProgress}
-            status={this.state.status}
-            active={this.state.active}
-          />
-        </View>
+        {body}
       </Animatable.View>
     );
   }

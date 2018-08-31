@@ -11,12 +11,12 @@ class MovieList extends React.Component {
   render() {
     return (
       <ScrollableTabView
-        renderTabBar={this.renderTabBar}
+        // renderTabBar={this.renderTabBar}
         tabBarUnderlineStyle={styles.underline}
         tabBarBackgroundColor={designLanguage.color900}
         tabBarActiveTextColor={designLanguage.color50}
         tabBarInactiveTextColor={designLanguage.color50}
-        // tabBarTextStyle
+        tabBarTextStyle={{ paddingTop: 10 }}
       >
         <Template
           tabLabel="新着"

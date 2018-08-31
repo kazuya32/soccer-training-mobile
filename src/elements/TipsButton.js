@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableHighlight, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as Animatable from 'react-native-animatable';
+import { View } from 'react-native-animatable';
 
 import designLanguage from '../../designLanguage.json';
 
@@ -32,9 +32,9 @@ class TipsButton extends React.Component {
     }
 
     return (
-      <Animatable.View animation="bounce" iterationCount={1} direction="alternate" duration={2000} ease="ease-out">
+      <View animation="bounce" iterationCount={1} direction="alternate" duration={2000} ease="ease-out">
         {body}
-      </Animatable.View>
+      </View>
     );
   }
 }

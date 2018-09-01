@@ -45,7 +45,7 @@ class ShareTile extends React.Component {
           <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor="transparent">
             <View style={styles.item}>
               <Icon
-                name="share"
+                name="share-variant"
                 size={36}
                 style={[
                   { color: designLanguage.color700 },

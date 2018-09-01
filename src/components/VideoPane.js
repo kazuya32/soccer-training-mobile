@@ -12,12 +12,14 @@ import {
 import firebase from 'firebase';
 
 import designLanguage from '../../designLanguage.json';
+import defaultMovie from '../../defaultMovie.json';
 
 class VideoPane extends React.Component {
   state = {
     videoUrl: this.props.defaultUri,
     resizeMode: 'cover',
     loaded: false,
+    isDefault: true,
   }
 
   componentWillMount() {
@@ -50,8 +52,13 @@ class VideoPane extends React.Component {
         console.log('doc exists');
         // const videoId = doc.data().currentVideo.id;
         const videoUrl = doc.data().currentVideoUrl;
+        const currentVideoId = doc.data().currentVideo && doc.data().currentVideo.id;
         if (videoUrl) {
-          this.setState({ videoUrl, loaded: false });
+          this.setState({
+            videoUrl,
+            loaded: false,
+            isDefault: defaultMovie.id === currentVideoId,
+          });
         }
       } else {
         // eslint-disable-next-line
@@ -69,6 +76,21 @@ class VideoPane extends React.Component {
   // eslint-disable-next-line
   onLoad = () => {
     this.setState({ loaded: true });
+    this.playback.setPositionAsync(0);
+    this.playback.playAsync();
+  }
+
+  onPlaybackStatusUpdate = (playbackStatus) => {
+    if (!playbackStatus.isLoaded && playbackStatus.error) {
+      // eslint-disable-next-line
+      console.log(`Encountered a fatal error during playback: ${playbackStatus.error}`);
+    } else if (playbackStatus.didJustFinish && !playbackStatus.isLooping) {
+      this.playback.stopAsync();
+    }
+  };
+
+  handleVideoRef = (component) => {
+    this.playback = component;
   }
 
   render() {
@@ -86,8 +108,8 @@ class VideoPane extends React.Component {
           <ActivityIndicator animating={!this.state.loaded} size="large" color={designLanguage.colorPrimary} />
         </View>
         <Video
-          // ref={ref => (this.video = ref)}
-          // onReadyForDisplay={this.setDimensions}
+          ref={this.handleVideoRef}
+          onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
           onLoad={this.onLoad}
           source={{ uri: this.state.videoUrl }}
           rate={1.0}
@@ -96,7 +118,7 @@ class VideoPane extends React.Component {
           resizeMode={this.state.resizeMode}
           shouldPlay
           positionMillis={0}
-          isLooping
+          isLooping={this.state.isDefault}
           useNativeControls
           // shouldCorrectPitch
           style={[

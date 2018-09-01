@@ -9,6 +9,7 @@ import CloseButton from '../elements/CloseButton.js';
 import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
 import UrlTile from './UrlTile.js';
+import ShareTile from './ShareTile.js';
 
 const defaultDesc = 'このアプリはプロのサッカー選手を目指すための技術を紹介しています。' +
   'サッカーの実践スキルを習得したい人や練習を指導する方のお役に立てると思います。\n\n' +
@@ -88,9 +89,13 @@ class Detail extends React.Component {
             comment={advice}
           />
           <UrlTile
-            show={!this.state.video.id}
+            show
             title="酒井潤公式HP"
             url="http://sakaijunsoccer.appspot.com/soccer"
+          />
+          <ShareTile
+            show
+            title="サッカー友達にシェアする"
           />
         </ScrollView>
         <CloseButton

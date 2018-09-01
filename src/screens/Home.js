@@ -53,8 +53,8 @@ class Home extends React.Component {
   }
 
   fetchDefaultVideo = () => {
-    const digestYoutubeId = defaultMovie.youtubeId;
-    const defaultUri = `${FileSystem.documentDirectory}${digestYoutubeId}.mp4`;
+    const defaultYoutubeId = defaultMovie.youtubeId;
+    const defaultUri = `${FileSystem.documentDirectory}${defaultYoutubeId}.mp4`;
     // const defaultUri = FileSystem.cacheDirectory + 'test1.mp4';
     FileSystem.getInfoAsync(defaultUri)
       .then(({ exists }) => {

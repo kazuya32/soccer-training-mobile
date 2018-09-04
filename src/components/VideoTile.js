@@ -1,9 +1,32 @@
 import React from 'react';
 import { StyleSheet, TouchableHighlight, View, Image, Text } from 'react-native';
+import { FileSystem } from 'expo';
 
 import designLanguage from '../../designLanguage.json';
 
 class VideoTile extends React.Component {
+  state = {}
+
+  componentDidMount() {
+    this.cacheImage();
+  }
+  // eslint-disable-next-line
+  cacheImage = async () => {
+    const { video } = this.props;
+    const youtubeId = video.data.youtubeData.id.videoId;
+    const thumbnailUrl = video.data.youtubeData.snippet.thumbnails.high.url;
+
+    const ext = await this.getFileExtension(thumbnailUrl);
+    const path = FileSystem.cacheDirectory + 'thumbnail' + youtubeId + '.' + ext;
+    const info = await FileSystem.getInfoAsync(path);
+    if (!info.exists) {
+      await FileSystem.downloadAsync(thumbnailUrl, path);
+    }
+    this.setState({ uri: path });
+  };
+
+  getFileExtension = async filename => filename.split('.').pop().split('?').shift();
+
   render() {
     const {
       active,
@@ -11,7 +34,7 @@ class VideoTile extends React.Component {
       video,
     } = this.props;
 
-    const thumbnailUrl = video.data.youtubeData.snippet.thumbnails.high.url;
+
     // const { title } = video.data.youtubeData.snippet;
     // const desc = video.data.youtubeData.snippet.description;
     const { player } = video.data.tags;
@@ -28,7 +51,7 @@ class VideoTile extends React.Component {
         >
           <Image
             style={styles.thumbnail}
-            source={{ uri: thumbnailUrl }}
+            source={{ uri: this.state.uri }}
             resizeMode="cover"
           />
           <View style={[styles.caption]}>

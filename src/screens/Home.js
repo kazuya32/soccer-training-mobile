@@ -55,7 +55,7 @@ class Home extends React.Component {
   fetchDefaultVideo = () => {
     const defaultYoutubeId = defaultMovie.youtubeId;
     const defaultUri = `${FileSystem.documentDirectory}${defaultYoutubeId}.mp4`;
-    // const defaultUri = FileSystem.cacheDirectory + 'test1.mp4';
+    // const defaultUri = FileSystem.cacheDirectory + 'test2.mp4';
     FileSystem.getInfoAsync(defaultUri)
       .then(({ exists }) => {
         if (exists) {
@@ -128,7 +128,7 @@ class Home extends React.Component {
 
     if (!this.state.initialized) {
       // if (true) {
-      const loadingText = 'Loading(80.3MB)';
+      const loadingText = `Loading(${defaultMovie.fileSize})`;
       return (
         <View style={[styles.container, { justifyContent: 'center' }]} >
           <Text style={styles.loading}>

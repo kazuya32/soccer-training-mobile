@@ -10,6 +10,7 @@ import TipsTile from './TipsTile.js';
 import AdviceTile from './AdviceTile.js';
 import UrlTile from './UrlTile.js';
 import ShareTile from './ShareTile.js';
+import Toggle from './Toggle.js';
 
 const defaultDesc = 'このアプリはプロのサッカー選手を目指すための技術を紹介しています。' +
   'サッカーの実践スキルを習得したい人や練習を指導する方のお役に立てると思います。\n\n' +
@@ -20,9 +21,13 @@ const defaultDesc = 'このアプリはプロのサッカー選手を目指す�
 class Detail extends React.Component {
   state = {
     buttonEnabled: true,
+    // granted: false,
   }
 
   componentDidMount() {
+    // if (Platform.OS === 'android') {
+    //   this.fetchPermissionInfo();
+    // }
     this.fetchSession();
   }
 
@@ -31,6 +36,24 @@ class Detail extends React.Component {
       routeName: 'List',
     });
   }
+
+  // fetchPermissionInfo = async () => {
+  //   const value = await AsyncStorage.getItem('granted');
+  //   this.setState({ granted: (value === 'true') });
+  // }
+
+  // askPermission = async () => {
+  //   if (this.state.granted) {
+  //     await AsyncStorage.setItem('granted', 'false');
+  //     this.setState({ granted: false });
+  //   } else {
+  //     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  //     if (status === 'granted') {
+  //       this.setState({ granted: true });
+  //       await AsyncStorage.setItem('granted', 'true');
+  //     }
+  //   }
+  // }
 
   fetchSession = () => {
     const db = firebase.firestore();
@@ -92,6 +115,15 @@ class Detail extends React.Component {
             show
             title="酒井潤公式HP"
             url="http://sakaijunsoccer.appspot.com/soccer"
+          />
+          <Toggle
+            show={false}
+            // show={isDefault && Platform.OS === 'android'}
+            title="外部ストレージを使用する"
+            leftText="No"
+            rightText="Yes"
+            value={this.state.granted}
+            onValueChange={this.askPermission}
           />
           <ShareTile
             show

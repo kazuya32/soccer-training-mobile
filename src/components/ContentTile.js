@@ -5,13 +5,16 @@ import {
   Alert,
   Platform,
   AsyncStorage,
+  // PermissionsAndroid,
 } from 'react-native';
 import {
   Constants,
   FileSystem,
+  // Permissions,
 } from 'expo';
 import firebase from 'firebase';
 import * as Animatable from 'react-native-animatable';
+// import RNFS from 'react-native-fs';
 
 import designLanguage from '../../designLanguage.json';
 import defaultMovie from '../../defaultMovie.json';
@@ -126,6 +129,49 @@ class ContentTile extends React.Component {
     }
   }
 
+  downloadAndroid = async () => {
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    // if (status === 'granted') {
+    //   // this.downloadSDCard();
+    // }
+    // console.log(RNFS.ExternalStorageDirectoryPath);
+    this.download();
+  }
+
+  // downloadSDCard = async () => {
+  //   FileSystem.getInfoAsync('file:///sdcard/')
+  //     .then(({ exists }) => {
+  //       console.log('exists', exists);
+  //     })
+  //     .catch((error) => {
+  //       // eslint-disable-next-line
+  //       console.log(error);
+  //     });
+  //   // try {
+  //   //   const remoteUri = await this.getRemoteUri();
+  //   //   if (remoteUri) {
+  //   //     this.download = FileSystem.createDownloadResumable(
+  //   //       remoteUri,
+  //   //       'file:///sdcard/soccerhacker/sample.mp4',
+  //   //       {},
+  //   //       this.setProgress,
+  //   //     );
+  //   //
+  //   //     await this.download.downloadAsync();
+  //   //     // eslint-disable-next-line
+  //   //     if (this.state.downloadProgress === 1){
+  //   //       this.setState({ hasLocalDocument: true, status: null });
+  //   //     }
+  //   //   } else {
+  //   //     Alert.alert('この動画は現在利用できません。');
+  //   //     this.setState({ status: null });
+  //   //   }
+  //   // } catch (e) {
+  //   //   // eslint-disable-next-line
+  //   //   console.error(e);
+  //   // }
+  // }
+
   download = async () => {
     try {
       const remoteUri = await this.getRemoteUri();
@@ -221,7 +267,11 @@ class ContentTile extends React.Component {
       this.confirmDelete();
     } else if (!this.state.status) {
       this.setState({ status: 'loading' });
-      this.download();
+      if (Platform.OS === 'android') {
+        this.downloadAndroid();
+      } else {
+        this.download();
+      }
     } else if (this.state.status === 'loading') {
       this.setState({ status: 'paused' });
       // eslint-disable-next-line

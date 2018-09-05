@@ -129,13 +129,13 @@ class ContentTile extends React.Component {
     }
   }
 
-  downloadAndroid = async () => {
+  downloadVideoAndroid = async () => {
     // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     // if (status === 'granted') {
     //   // this.downloadSDCard();
     // }
     // console.log(RNFS.ExternalStorageDirectoryPath);
-    this.download();
+    this.downloadVideo();
   }
 
   // downloadSDCard = async () => {
@@ -172,7 +172,7 @@ class ContentTile extends React.Component {
   //   // }
   // }
 
-  download = async () => {
+  downloadVideo = async () => {
     try {
       const remoteUri = await this.getRemoteUri();
       if (remoteUri) {
@@ -219,7 +219,7 @@ class ContentTile extends React.Component {
   deleteLocalVideo = async () => {
     FileSystem.deleteAsync(this.state.localUri)
       .then(() => {
-        this.setState({ hasLocalDocument: false });
+        this.setState({ hasLocalDocument: false, status: null, downloadProgress: 0 });
       })
       .catch((error) => {
         // eslint-disable-next-line
@@ -228,19 +228,23 @@ class ContentTile extends React.Component {
   }
 
   confirmDelete = async () => {
-    Alert.alert(
-      '選択した動画をアプリから削除してもよろしいですか？',
-      undefined,
-      [
-        // eslint-disable-next-line
-        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        {
-          text: 'OK',
-          onPress: this.deleteLocalVideo,
-        },
-      ],
-      { cancelable: false },
-    );
+    if (this.state.active) {
+      Alert.alert('保存した動画を再生中に削除することはできません。');
+    } else {
+      Alert.alert(
+        '選択した動画をアプリから削除してもよろしいですか？',
+        undefined,
+        [
+          // eslint-disable-next-line
+          { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+          {
+            text: 'OK',
+            onPress: this.deleteLocalVideo,
+          },
+        ],
+        { cancelable: false },
+      );
+    }
   }
 
   playLocalVideo = async () => {
@@ -268,9 +272,9 @@ class ContentTile extends React.Component {
     } else if (!this.state.status) {
       this.setState({ status: 'loading' });
       if (Platform.OS === 'android') {
-        this.downloadAndroid();
+        this.downloadVideoAndroid();
       } else {
-        this.download();
+        this.downloadVideo();
       }
     } else if (this.state.status === 'loading') {
       this.setState({ status: 'paused' });
@@ -287,7 +291,6 @@ class ContentTile extends React.Component {
 
   // eslint-disable-next-line
   onPressTile = () => {
-    // this.view.bounce(800);
     if (this.state.hasLocalDocument) {
       this.playLocalVideo();
     } else if (!this.state.active) {

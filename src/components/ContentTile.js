@@ -200,6 +200,10 @@ class ContentTile extends React.Component {
 
   getRemoteUri = () => {
     const { video } = this.props;
+    if (video.id === 'セルヒオ・ブスケツの引き技からの縦突破と裏へ抜けるサイドチェンジのキック') {
+      const videoUrl = 'https://firebasestorage.googleapis.com/v0/b/lifting-cb667.appspot.com/o/video%2FwithoutComment%2F%E3%82%BB%E3%83%AB%E3%83%92%E3%82%AA%E3%83%BB%E3%83%95%E3%82%99%E3%82%B9%E3%82%B1%E3%83%84%E3%81%AE%E5%BC%95%E3%81%8D%E6%8A%80%E3%81%8B%E3%82%89%E3%81%AE%E7%B8%A6%E7%AA%81%E7%A0%B4%E3%81%A8%E8%A3%8F%E3%81%B8%E6%8A%9C%E3%81%91%E3%82%8B%E3%82%B5%E3%82%A4%E3%83%88%E3%82%99%E3%83%81%E3%82%A7%E3%83%B3%E3%82%B7%E3%82%99%E3%81%AE%E3%82%AD%E3%83%83%E3%82%AF.mp4?alt=media&token=8e6bc1c9-e5aa-42a2-96ac-ea210f7c6f8a';
+      return videoUrl;
+    }
 
     const storage = firebase.storage();
     const storageRef = storage.ref();
@@ -213,7 +217,7 @@ class ContentTile extends React.Component {
             // eslint-disable-next-line
             console.log(error);
           });
-      });
+      });  
   }
 
   deleteLocalVideo = async () => {
@@ -295,6 +299,7 @@ class ContentTile extends React.Component {
       this.playLocalVideo();
     } else if (!this.state.active) {
       this.playRemoteVideo();
+      console.log(this.props.video.id);
     }
   }
 

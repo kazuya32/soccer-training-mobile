@@ -170,7 +170,7 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: designLanguage.color50,
+    // backgroundColor: designLanguage.color50,
   },
   loading: {
     padding: 32,

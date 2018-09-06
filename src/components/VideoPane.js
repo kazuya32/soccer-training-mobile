@@ -99,7 +99,7 @@ class VideoPane extends React.Component {
     } = this.props;
 
     return (
-      <View>
+      <View style={styles.container}>
         <View
           style={[
             styles.indicator,
@@ -115,7 +115,8 @@ class VideoPane extends React.Component {
           rate={1.0}
           volume={1.0}
           isMuted
-          resizeMode={this.state.resizeMode}
+          resizeMode="contain"
+          // resizeMode={this.state.resizeMode}
           shouldPlay
           positionMillis={0}
           isLooping={this.state.isDefault}
@@ -134,10 +135,16 @@ class VideoPane extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: designLanguage.color50,
+  },
   indicator: {
     position: 'absolute',
     padding: 100,
     alignSelf: 'center',
+  },
+  video: {
+    backgroundColor: '#000000',
   },
 });
 

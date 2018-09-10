@@ -1,6 +1,7 @@
+import { AsyncStorage } from 'react-native';
 import { Segment, Constants } from 'expo';
-
 import firebase from 'firebase';
+import uuid from 'uuid';
 
 import ENV from './env.json';
 import Home from './src/screens/Home.js';
@@ -25,8 +26,27 @@ const androidWriteKey = ENV.SEGMENT_WRITE_KEY;
 const iosWriteKey = ENV.SEGMENT_WRITE_KEY;
 Segment.initialize({ androidWriteKey, iosWriteKey });
 
-const deviceId = Constants.installationId;
-Segment.identify(deviceId);
+try {
+  const deviceId = Constants.platform.OS === 'ios' ? Constants.installationId : uuid.v1();
+  console.log(deviceId);
+  // Segment.identify(deviceId);
+} catch (error) {
+  console.log('error in identify');
+}
 
+if (Constants.platform.OS === 'ios') {
+  const deviceId = Constants.installationId;
+  console.log(deviceId);
+  // Segment.identify(deviceId);
+} else {
+  AsyncStorage.getItem('deviceId')
+    .then((value) => {
+      console.log('deviceId existed');
+      console.log(value);
+    })
+    .catch((error) => {
+      console.log('No deviceId');
+    });
+}
 
 export default Home;

@@ -1,7 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { Constants } from 'expo';
-import firebase from 'firebase';
+import { View, ScrollView, StyleSheet } from 'react-native';
 
 import designLanguage from '../../designLanguage.json';
 import defaultMovie from '../../defaultMovie.json';
@@ -24,11 +22,11 @@ class Detail extends React.Component {
     // granted: false,
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // if (Platform.OS === 'android') {
     //   this.fetchPermissionInfo();
     // }
-    this.fetchSession();
+    // this.fetchSession();
   }
 
   onPressClose = () => {
@@ -55,57 +53,31 @@ class Detail extends React.Component {
   //   }
   // }
 
-  fetchSession = () => {
-    const db = firebase.firestore();
-    const sessionRef = db.collection('sessions').doc(Constants.sessionId);
-    sessionRef.onSnapshot((doc) => {
-      if (doc.exists) {
-        const video = doc.data().currentVideo;
-        const { buttonEnabled } = doc.data();
-        if (video) {
-          this.setState({ video, buttonEnabled });
-        } else {
-          const defaultVideo = { id: defaultMovie.id, data: {} };
-          this.setState({ video: defaultVideo, buttonEnabled });
-        }
-      } else {
-        Alert.alert('エラーが発生しました。');
-        this.props.navigation.goBack();
-      }
-    });
-  }
-
   render() {
-    if (!this.state.video) {
-      return (
-        <View style={[styles.indicator]}>
-          <ActivityIndicator animating={!this.state.video} size="large" color={designLanguage.colorPrimary} />
-        </View>
-      );
-    }
+    const video = this.props.navigation.state.params.video || { id: defaultMovie.id, data: {} };
 
-    const isDefault = this.state.video.id === defaultMovie.id;
+    const isDefault = video.id === defaultMovie.id;
     const adviceTileName = isDefault ? 'このアプリについて' : '実践アドバイス';
-    const advice = isDefault ? defaultDesc : this.state.video.data.advice;
+    const advice = isDefault ? defaultDesc : video.data.advice;
 
     return (
       <View style={styles.container}>
         <ScrollView>
           <TipsTile
             title="スキルのポイント"
-            tipsArray={this.state.video && this.state.video.data.point}
+            tipsArray={video.data.point}
           />
           <TipsTile
             title="練習ステップ"
-            tipsArray={this.state.video && this.state.video.data.practice}
+            tipsArray={video.data.practice}
           />
           <TipsTile
             title="失敗パターン"
-            tipsArray={this.state.video && this.state.video.data.failure}
+            tipsArray={video.data.failure}
           />
           <TipsTile
             title="応用テクニック"
-            tipsArray={this.state.video && this.state.video.data.advanced}
+            tipsArray={video.data.advanced}
           />
           <AdviceTile
             title={adviceTileName}

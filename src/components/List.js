@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Constants } from 'expo';
+import { Constants, Segment } from 'expo';
 import firebase from 'firebase';
 
 import defaultMovie from '../../defaultMovie.json';
@@ -25,14 +25,28 @@ class List extends React.Component {
       if (doc.exists) {
         const { currentVideo, buttonEnabled } = doc.data();
         const hasContent = currentVideo && currentVideo.id !== defaultMovie.id;
-        this.setState({ hasContent, buttonEnabled });
+        this.setState({ hasContent, buttonEnabled, currentVideo });
       }
     });
   }
 
   onButtonPress = async () => {
+    const videoTitle = this.state.currentVideo ? this.state.currentVideo.id : defaultMovie.id;
+    const properties = { category: 'video', label: videoTitle };
+
+    const screenName = 'Detail';
+    Segment.screenWithProperties(screenName, properties);
+
+    // const event = 'Detail Viewed';
+    // const event = 'Detail';
+    // Segment.trackWithProperties(event, properties);
+
+
     this.props.navigation.navigate({
       routeName: 'Detail',
+      params: {
+        video: this.state.currentVideo,
+      },
     });
   }
 

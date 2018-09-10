@@ -1,3 +1,5 @@
+import { Segment, Constants } from 'expo';
+
 import firebase from 'firebase';
 
 import ENV from './env.json';
@@ -19,10 +21,12 @@ const config = {
 };
 firebase.initializeApp(config);
 
-// const App = createStackNavigator({
-//   Home: { screen: Home },
-// }, {
-//   headerMode: 'none',
-// });
+const androidWriteKey = ENV.SEGMENT_WRITE_KEY;
+const iosWriteKey = ENV.SEGMENT_WRITE_KEY;
+Segment.initialize({ androidWriteKey, iosWriteKey });
+
+const deviceId = Constants.installationId;
+Segment.identify(deviceId);
+
 
 export default Home;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { Segment } from 'expo';
 import firebase from 'firebase';
 
 import designLanguage from '../../designLanguage.json';
@@ -14,6 +15,9 @@ class Template extends React.Component {
   }
 
   componentWillMount() {
+    const category = this.props.category.charAt(0).toUpperCase() + this.props.category.slice(1);
+    const screenName = `List ${category}`;
+    Segment.screen(screenName);
     this.fetchVideos(this.props.category);
   }
 

@@ -8,6 +8,7 @@ import {
 import {
   Video,
   Constants,
+  Segment,
 } from 'expo';
 import firebase from 'firebase';
 
@@ -54,6 +55,13 @@ class VideoPane extends React.Component {
         const videoUrl = doc.data().currentVideoUrl;
         const currentVideoId = doc.data().currentVideo && doc.data().currentVideo.id;
         if (videoUrl) {
+          // const event = 'Video Selected';
+          const videoTitle = currentVideoId;
+          const event = videoTitle;
+          // const properties = { category: videoTitle, label: videoTitle, value: videoTitle };
+          const properties = { category: 'video', label: 'selected', value: videoTitle };
+          Segment.trackWithProperties(event, properties);
+
           this.setState({
             videoUrl,
             loaded: false,

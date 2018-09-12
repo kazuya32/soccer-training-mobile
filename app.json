@@ -6,7 +6,7 @@
     "privacy": "public",
     "sdkVersion": "28.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.5.4",
+    "version": "1.5.5",
     "orientation": "default",
     "primaryColor": "#1C86A9",
     "icon": "./assets/SoccerHackerIcon144-ios.png",
@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "com.lifting.android",
-      "versionCode": 18,
+      "versionCode": 19,
       "icon": "./assets/SoccerHackerIcon144-android.png"
     },
   }

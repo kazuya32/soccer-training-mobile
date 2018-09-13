@@ -23,9 +23,9 @@ class List extends React.Component {
     const sessionRef = db.collection('sessions').doc(Constants.sessionId);
     sessionRef.onSnapshot((doc) => {
       if (doc.exists) {
-        const { currentVideo, buttonEnabled } = doc.data();
+        const { currentVideo, buttonEnabled, rate } = doc.data();
         const hasContent = currentVideo && currentVideo.id !== defaultMovie.id;
-        this.setState({ hasContent, buttonEnabled, currentVideo });
+        this.setState({ hasContent, buttonEnabled, currentVideo, rate });
       }
     });
   }
@@ -46,6 +46,7 @@ class List extends React.Component {
       routeName: 'Detail',
       params: {
         video: this.state.currentVideo,
+        rate: this.state.rate,
       },
     });
   }

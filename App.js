@@ -28,6 +28,7 @@ Segment.initialize({ androidWriteKey, iosWriteKey });
 
 if (Platform.OS === 'ios') {
   const deviceId = Constants.installationId;
+  AsyncStorage.setItem('deviceId', deviceId);
   Segment.identify(deviceId);
 } else {
   AsyncStorage.getItem('deviceId')

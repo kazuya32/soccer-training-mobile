@@ -21,6 +21,7 @@ class VideoPane extends React.Component {
     resizeMode: 'cover',
     loaded: false,
     isDefault: true,
+    rate: 1.0,
   }
 
   componentWillMount() {
@@ -54,19 +55,27 @@ class VideoPane extends React.Component {
         // const videoId = doc.data().currentVideo.id;
         const videoUrl = doc.data().currentVideoUrl;
         const currentVideoId = doc.data().currentVideo && doc.data().currentVideo.id;
-        if (videoUrl) {
+        const rate = doc.data().rate || 1.0;
+
+        if (videoUrl && (videoUrl !== this.state.videoUrl)) {
           // const event = 'Video Selected';
           const videoTitle = currentVideoId;
           const event = videoTitle;
           // const properties = { category: videoTitle, label: videoTitle, value: videoTitle };
-          const properties = { category: 'video', label: 'selected', value: videoTitle };
+          const properties = { category: 'video', label: 'selected', value: videoTitle, rate };
           Segment.trackWithProperties(event, properties);
 
           this.setState({
             videoUrl,
             loaded: false,
             isDefault: defaultMovie.id === currentVideoId,
+            rate,
+            realRate: rate,
           });
+        } else if (rate !== this.state.realRate) {
+          this.playback.setRateAsync(rate, false);
+          // real rateのみを更新するようにしないとvideo componentに再更新がはしる
+          this.setState({ realRate: rate });
         }
       } else {
         // eslint-disable-next-line
@@ -120,7 +129,7 @@ class VideoPane extends React.Component {
           onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
           onLoad={this.onLoad}
           source={{ uri: this.state.videoUrl }}
-          rate={1.0}
+          rate={this.state.rate}
           volume={1.0}
           isMuted
           resizeMode="contain"

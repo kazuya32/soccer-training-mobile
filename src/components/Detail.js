@@ -9,6 +9,7 @@ import AdviceTile from './AdviceTile.js';
 import UrlTile from './UrlTile.js';
 import ShareTile from './ShareTile.js';
 import Toggle from './Toggle.js';
+import RateToggle from './RateToggle.js';
 
 const defaultDesc = 'このアプリはプロのサッカー選手を目指すための技術を紹介しています。' +
   'サッカーの実践スキルを習得したい人や練習を指導する方のお役に立てると思います。\n\n' +
@@ -55,6 +56,7 @@ class Detail extends React.Component {
 
   render() {
     const video = this.props.navigation.state.params.video || { id: defaultMovie.id, data: {} };
+    const rate = this.props.navigation.state.params.rate || 1.0;
 
     const isDefault = video.id === defaultMovie.id;
     const adviceTileName = isDefault ? 'このアプリについて' : '実践アドバイス';
@@ -63,6 +65,11 @@ class Detail extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
+          <RateToggle
+            show
+            title="再生スピード"
+            initialRate={rate}
+          />
           <TipsTile
             title="スキルのポイント"
             tipsArray={video.data.point}

@@ -3,3 +3,4 @@ node_modules/**/*
 npm-debug.*
 env.json
 youtubeIndexer.js
+google-services.json

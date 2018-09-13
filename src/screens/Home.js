@@ -3,6 +3,8 @@ import {
   StyleSheet,
   View,
   Text,
+  Platform,
+  AsyncStorage,
 } from 'react-native';
 import {
   AdMobBanner,
@@ -11,7 +13,10 @@ import {
   AdMobRewarded,
   ScreenOrientation,
   FileSystem,
+  Permissions,
+  Notifications,
 } from 'expo';
+import firebase from 'firebase';
 import { Circle } from 'react-native-progress';
 
 import designLanguage from '../../designLanguage.json';
@@ -42,6 +47,44 @@ class Home extends React.Component {
   componentWillMount() {
     this.fetchDefaultVideo();
     ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
+  }
+
+  componentDidMount() {
+    this.registerForPushNotificationsAsync();
+  }
+
+  // eslint-disable-next-line
+  registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+      return;
+    }
+
+    const token = await Notifications.getExpoPushTokenAsync();
+    this.setPushToken(token);
+  }
+
+  // eslint-disable-next-line
+  setPushToken = async (token) => {
+    const deviceId = await AsyncStorage.getItem('deviceId');
+
+    const db = firebase.firestore();
+    const ref = db.collection('devices').doc(deviceId);
+    ref.set({
+      pushToken: token,
+      os: Platform.OS,
+    }, { merge: true })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.error('Error updating document: ', error);
+      });
   }
 
   // eslint-disable-next-line

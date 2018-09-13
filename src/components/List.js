@@ -32,15 +32,13 @@ class List extends React.Component {
 
   onButtonPress = async () => {
     const videoTitle = this.state.currentVideo ? this.state.currentVideo.id : defaultMovie.id;
-    const properties = { category: 'video', label: videoTitle };
+    const { category } = this.state.currentVideo.data;
+    const properties = { category, label: videoTitle };
+    const event = 'Detail Viewed';
+    Segment.trackWithProperties(event, properties);
 
     const screenName = 'Detail';
-    Segment.screenWithProperties(screenName, properties);
-
-    // const event = 'Detail Viewed';
-    // const event = 'Detail';
-    // Segment.trackWithProperties(event, properties);
-
+    Segment.screen(screenName);
 
     this.props.navigation.navigate({
       routeName: 'Detail',

@@ -58,11 +58,10 @@ class VideoPane extends React.Component {
         const rate = doc.data().rate || 1.0;
 
         if (videoUrl && (videoUrl !== this.state.videoUrl)) {
-          // const event = 'Video Selected';
+          const event = 'Video Selected';
           const videoTitle = currentVideoId;
-          const event = videoTitle;
-          // const properties = { category: videoTitle, label: videoTitle, value: videoTitle };
-          const properties = { category: 'video', label: 'selected', value: videoTitle, rate };
+          const { category } = doc.data().currentVideo.data;
+          const properties = { category, label: videoTitle };
           Segment.trackWithProperties(event, properties);
 
           this.setState({

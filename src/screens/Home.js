@@ -46,7 +46,8 @@ class Home extends React.Component {
 
   componentWillMount() {
     this.fetchDefaultVideo();
-    ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
+    // eslint-disable-next-line
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL_BUT_UPSIDE_DOWN).catch(error => console.log(error));
   }
 
   componentDidMount() {

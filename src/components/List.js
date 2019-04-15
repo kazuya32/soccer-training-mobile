@@ -32,7 +32,7 @@ class List extends React.Component {
 
   onButtonPress = async () => {
     const videoTitle = this.state.currentVideo ? this.state.currentVideo.id : defaultMovie.id;
-    const { category } = this.state.currentVideo.data;
+    const { category } = this.state.currentVideo ? this.state.currentVideo.data : 'Default';
     const properties = { category, label: videoTitle };
     const event = 'Detail Viewed';
     Segment.trackWithProperties(event, properties);

@@ -217,7 +217,7 @@ class ContentTile extends React.Component {
             // eslint-disable-next-line
             console.log(error);
           });
-      });  
+      });
   }
 
   deleteLocalVideo = async () => {
@@ -308,7 +308,7 @@ class ContentTile extends React.Component {
   render() {
     const {
       video,
-      index,
+      // index,
     } = this.props;
 
     const isDefault = video.id === defaultMovie.id;
@@ -319,8 +319,9 @@ class ContentTile extends React.Component {
     const animationIOS = 'fadeIn';
     const animation = isAndroid ? animationAndroid : animationIOS;
 
-    const delayTime = isAndroid ? 400 : 300;
-    const delay = (index + 1) * delayTime;
+    // const delayTime = isAndroid ? 400 : 300;
+    // const delay = (index + 1) * delayTime;
+    const delay = 0;
     const ease = isAndroid ? 'ease' : 'ease';
 
     const body = (
